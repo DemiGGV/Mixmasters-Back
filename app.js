@@ -4,7 +4,9 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth.route");
-const contactsRouter = require("./routes/api/contacts.route");
+const usersRouter = require("./routes/api/users.route");
+// const filtersRouter = require("./routes/api/filters.route");
+// const recipesRouter = require("./routes/api/recipes.route");
 const { HttpError } = require("./helpers");
 
 const app = express();
@@ -15,8 +17,10 @@ app.use(express.static("public"));
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 
-app.use("/api/users", authRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", usersRouter);
+// app.use("/api/filters", filtersRouter);
+// app.use("/api/recipes", recipesRouter);
 
 // Error handler
 app.use((req, res, next) => {

@@ -3,10 +3,22 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 const EMAILPATTERN = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-const subScription = ["starter", "pro", "business"];
+const BIRTHDAYPATTERN =
+  /^[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])$/;
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      default: null,
+      requred: [true, "Username is required"],
+    },
+    birthdate: {
+      type: String,
+      match: BIRTHDAYPATTERN,
+      default: null,
+      requred: [true, "Birthdate is required"],
+    },
     email: {
       type: String,
       match: EMAILPATTERN,
@@ -18,11 +30,6 @@ const userSchema = new Schema(
       minlength: 6,
       requred: [true, "Password is required"],
     },
-    subscription: {
-      type: String,
-      enum: subScription,
-      default: "starter",
-    },
     avatarURL: {
       type: String,
       default: null,
@@ -31,13 +38,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    verify: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
+    subscription: {
       type: String,
-      required: [true, "Verify token is required"],
+      match: EMAILPATTERN,
+      default: null,
     },
   },
   {
@@ -51,13 +55,33 @@ userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 // Joi validation
+// DD-MM-YYYY
 const signupSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": `missing required field name`,
+  }),
+  birthdate: Joi.string().pattern(BIRTHDAYPATTERN).required().messages({
+    "any.required": `missing required field birthdate`,
+    "string.pattern.base": `wrong birthdate`,
+  }),
   email: Joi.string().pattern(EMAILPATTERN).required().messages({
-    "any.required": `missing fields`,
+    "any.required": `missing required field email`,
+    "string.pattern.base": `wrong email`,
+  }),
+  password: Joi.string().min(6).required().messages({
+    "any.required": `missing required field password`,
+    "string.min": `Password min 6 symbol length`,
+  }),
+});
+
+const signinSchema = Joi.object({
+  email: Joi.string().pattern(EMAILPATTERN).required().messages({
+    "any.required": `missing required field email`,
     "string.pattern.base": `wrong email`,
   }),
   password: Joi.string().required().messages({
-    "any.required": `missing fields`,
+    "any.required": `missing required field password`,
+    "string.min": `Password min 6 symbol length`,
   }),
 });
 
@@ -68,30 +92,10 @@ const verifyEmailSchema = Joi.object({
   }),
 });
 
-const signinSchema = Joi.object({
-  email: Joi.string().pattern(EMAILPATTERN).required().messages({
-    "any.required": `missing fields`,
-    "string.pattern.base": `wrong email`,
-  }),
-  password: Joi.string().required().messages({
-    "any.required": `missing fields`,
-  }),
-});
-
-const updSubscriptionSchema = Joi.object({
-  subscription: Joi.string()
-    .valid(...subScription)
-    .required()
-    .messages({
-      "any.required": `missing fields`,
-    }),
-});
-
 const schemas = {
   signupSchema,
-  verifyEmailSchema,
   signinSchema,
-  updSubscriptionSchema,
+  verifyEmailSchema,
 };
 
 module.exports = { User, schemas };
