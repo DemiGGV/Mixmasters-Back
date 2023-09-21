@@ -17,7 +17,7 @@ const sendMail = async (emailList, letter) => {
   const emailOptions = {
     from: UN_USER,
     to: emailList,
-    subject: "Just Email",
+    subject: "JustEmail",
     html: letter,
   };
   try {
