@@ -4,7 +4,7 @@ const { handleMongooseError } = require("../helpers");
 
 const EMAILPATTERN = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const BIRTHDAYPATTERN =
-  /^[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])$/;
+  /^([1-2][0-9]|[0][1-9]|[3][0-1])-([0][1-9]|[1][0-2])-[1-9][0-9][0-9]{2}$/;
 
 const userSchema = new Schema(
   {
@@ -55,7 +55,7 @@ userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 // Joi validation
-// DD-MM-YYYY
+//  DD-MM-YYYY или YYYY-MM-DD
 const signupSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required field name`,
