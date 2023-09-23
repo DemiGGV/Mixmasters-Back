@@ -5,13 +5,16 @@ const { User } = require("../models/user.model");
 const avatarsPath = path.join(__dirname, "../", "public", "avatars");
 
 const getCurrent = async (req, res) => {
-  const { name, subscription, avatarURL, email, birthdate } = req.user;
+  const { _id, name, subscription, avatarURL, email, birthdate, createdAt } =
+    req.user;
   res.json({
+    _id,
     name,
     email,
-    avatarURL,
     birthdate,
+    avatarURL,
     subscription,
+    createdAt,
   });
 };
 
@@ -19,8 +22,14 @@ const subscribeEmail = async (req, res) => {
   const { _id, email, name } = req.user;
   const { subscription } = req.body;
   await User.findByIdAndUpdate(_id, { subscription });
-  await sendMail(email, name);
+  await sendMail(email, name, _id);
   res.json({ _id, subscription });
+};
+
+const unsubscribeEmail = async (req, res) => {
+  const { id } = req.params;
+  await User.findByIdAndUpdate(id, { subscription: null });
+  res.redirect("https://vasyl24.github.io/mixmasters/");
 };
 
 const updateUser = async (req, res) => {
@@ -41,5 +50,6 @@ const updateUser = async (req, res) => {
 module.exports = {
   getCurrent: ctrlWrap(getCurrent),
   subscribeEmail: ctrlWrap(subscribeEmail),
+  unsubscribeEmail: ctrlWrap(unsubscribeEmail),
   updateUser: ctrlWrap(updateUser),
 };

@@ -49,7 +49,11 @@ const signin = async (req, res) => {
   // checking if user exist
   if (!user) throw HttpError(401, "Email is wrong");
 
-  // checking if token expired
+  // checking user password
+  const checkPassword = await bcrypt.compare(password, user.password);
+  if (!checkPassword) throw HttpError(401, "Password is wrong");
+
+  // checking if user token expired
   jwt.verify(user.token, SECRET_KEY, (err, decoded) => {
     if (err?.message === "jwt expired") {
       user.token = null;
@@ -59,11 +63,7 @@ const signin = async (req, res) => {
   // checking if user logined
   if (user.token) throw HttpError(422, "Already logined");
 
-  // checking password
-  const checkPassword = bcrypt.compare(password, user.password);
-  if (!checkPassword) throw HttpError(401, "Password is wrong");
-
-  // create jwt token and login
+  // create jwt token and login user
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKENEXPIRE });
   await User.findByIdAndUpdate(user._id, { token });

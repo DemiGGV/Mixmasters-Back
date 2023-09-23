@@ -57,8 +57,9 @@ const User = model("user", userSchema);
 // Joi validation
 //  DD-MM-YYYY или YYYY-MM-DD
 const signupSchema = Joi.object({
-  name: Joi.string().required().messages({
+  name: Joi.string().min(3).required().messages({
     "any.required": `missing required field name`,
+    "string.min": `Name must be at least 3 symbol length`,
   }),
   birthdate: Joi.string().pattern(BIRTHDAYPATTERN).required().messages({
     "any.required": `missing required field birthdate`,
@@ -70,7 +71,7 @@ const signupSchema = Joi.object({
   }),
   password: Joi.string().min(6).required().messages({
     "any.required": `missing required field password`,
-    "string.min": `Password min 6 symbol length`,
+    "string.min": `Password must be at least 6 symbol length`,
   }),
 });
 
@@ -81,14 +82,26 @@ const signinSchema = Joi.object({
   }),
   password: Joi.string().required().messages({
     "any.required": `missing required field password`,
-    "string.min": `Password min 6 symbol length`,
+    "string.min": `Password must be at least 6 symbol length`,
   }),
 });
 
 const verifyEmailSchema = Joi.object({
   subscription: Joi.string().pattern(EMAILPATTERN).required().messages({
-    "any.required": `missing required field email`,
+    "any.required": `missing required field subscription`,
     "string.pattern.base": `wrong email`,
+  }),
+});
+
+const verifyNameSchema = Joi.object({
+  name: Joi.string().min(3).required().messages({
+    "string.empty": `field name is not allowed to be empty`,
+    "any.required": `missing required field name`,
+    "string.min": `Name must be at least 3 symbol length`,
+  }),
+  avatar: Joi.string().messages({
+    "string.empty": `field avatar is not allowed to be empty`,
+    "any.required": `missing required field avatar`,
   }),
 });
 
@@ -96,6 +109,7 @@ const schemas = {
   signupSchema,
   signinSchema,
   verifyEmailSchema,
+  verifyNameSchema,
 };
 
 module.exports = { User, schemas };

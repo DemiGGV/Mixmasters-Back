@@ -1,0 +1,515 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "MixMasters backend",
+    "description": "Swagger documentation for MixMasters backend."
+  },
+  "consumes": ["application/json", "multiparts/form-data"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "https://mixmasters.onrender.com"
+    },
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "Users endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration endpoint",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login endpoint",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "401": {
+            "description": "The email or password is incorrect",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Already logined",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/signout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Current user logout endpoint",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation. No content",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Retrieving data about the current user",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/update": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Updates the username and avatar in the database.",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "User object with an new name and image",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe",
+                    "description": "New user name"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "User's avatar image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/subscribe": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User subscription to a mailing endpoint with e-mail notification to a specified address",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Subscription email address",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribeUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user is subscribed to a mailing list. After that, an e-mail is sent to the specified address about registration in the mailing list and an opportunity to unsubscribe from it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscribeUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required field subscription",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "birthdate", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email"
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
+            "example": "10/10/2017",
+            "description": "User's birthdate"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "123456"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "format": "JWT"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's DB ObjectId",
+                "example": "650ebb0b805f86eb1147f13d"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "birthdate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
+                "example": "10/10/2017",
+                "description": "User's birthdate"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar",
+                "example": "//www.gravatar.com/avatar/395df683fb7c0f1aad22dbf40031517a?s=200&d=identicon"
+              }
+            }
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "123456"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "format": "JWT"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's DB ObjectId",
+                "example": "650ebb0b805f86eb1147f13d"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "birthdate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
+                "example": "10/10/2017",
+                "description": "User's birthdate"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar",
+                "example": "//www.gravatar.com/avatar/395df683fb7c0f1aad22dbf40031517a?s=200&d=identicon"
+              },
+              "subscription": {
+                "type": "string",
+                "description": "User's subscription email or Null",
+                "format": "email"
+              },
+              "createAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "User's registration date"
+              }
+            }
+          }
+        }
+      },
+      "LogoutUserResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message"
+          }
+        },
+        "example": {
+          "message": "No Content"
+        }
+      },
+      "GetUserResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User's DB ObjectId",
+            "example": "650ebb0b805f86eb1147f13d"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
+            "example": "10/10/2017",
+            "description": "User's birthdate"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's avatar",
+            "example": "//www.gravatar.com/avatar/395df683fb7c0f1aad22dbf40031517a?s=200&d=identicon"
+          },
+          "subscription": {
+            "type": "string",
+            "description": "User's subscription email or Null",
+            "format": "email"
+          },
+          "createAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "User's registration date"
+          }
+        }
+      },
+      "UpdateUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "John Doe",
+                "description": "Updated user's name"
+              },
+              "avatarURL": {
+                "type": "string",
+                "example": "//www.gravatar.com/avatar/395df683fb7c0f1aad22dbf40031517a?s=200&d=identicon",
+                "description": "User's avatar URL"
+              }
+            }
+          }
+        }
+      },
+      "SubscribeUserRequest": {
+        "type": "object",
+        "required": ["subscription"],
+        "properties": {
+          "subscription": {
+            "type": "string",
+            "format": "email",
+            "description": "User's subscription email"
+          }
+        }
+      },
+      "SubscribeUserResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User's DB ObjectId",
+            "example": "650ebb0b805f86eb1147f13d"
+          },
+          "subscription": {
+            "type": "string",
+            "description": "User's subscription email",
+            "format": "email"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
