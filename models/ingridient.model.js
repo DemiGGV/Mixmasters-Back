@@ -1,8 +1,9 @@
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 // Mongoose schema-model
-const ingridientDBSchema = new Schema(
+const recipeDBSchema = new Schema(
   {
     drink: {
       type: String,
@@ -37,21 +38,17 @@ const ingridientDBSchema = new Schema(
     drinkThumb: {
       type: String,
     },
-    ingredients: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "ingridient",
-      },
-    ],
-    favorite: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "user",
-      },
-    ],
+    ingredients: {
+      type: Schema.Types.ObjectId,
+      ref: "Ingridient",
+    },
+    favorite: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
     },
   },
   {
@@ -60,8 +57,32 @@ const ingridientDBSchema = new Schema(
   }
 );
 
-ingridientDBSchema.post("save", handleMongooseError);
+recipeDBSchema.post("save", handleMongooseError);
 
-const Ingridient = model("contact", ingridientDBSchema);
+const Recipe = model("contact", recipeDBSchema);
 
-module.exports = { Ingridient };
+// Joi validation
+const recipeSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": `missing fields`,
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": `missing fields`,
+  }),
+  favorite: Joi.boolean().messages({
+    "any.required": `missing fields`,
+  }),
+});
+
+const updFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
+
+const schemas = {
+  recipeSchema,
+  updFavoriteSchema,
+};
+
+module.exports = { Recipe, schemas };

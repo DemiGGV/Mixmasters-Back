@@ -86,7 +86,7 @@ const signinSchema = Joi.object({
 });
 
 const verifyEmailSchema = Joi.object({
-  email: Joi.string().pattern(EMAILPATTERN).required().messages({
+  subscription: Joi.string().pattern(EMAILPATTERN).required().messages({
     "any.required": `missing required field email`,
     "string.pattern.base": `wrong email`,
   }),

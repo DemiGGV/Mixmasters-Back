@@ -1,8 +1,9 @@
 const nodemailer = require("nodemailer");
+const emailTmpl = require("./emailTmpl");
 
 const { UN_PASS, UN_USER, UN_SERVER, UN_PORT } = process.env;
 
-const sendMail = async (emailList, letter) => {
+const sendMail = async (email, name) => {
   const config = {
     host: UN_SERVER,
     port: UN_PORT,
@@ -14,10 +15,11 @@ const sendMail = async (emailList, letter) => {
   };
 
   const transporter = nodemailer.createTransport(config);
+  const letter = emailTmpl(name);
   const emailOptions = {
     from: UN_USER,
-    to: emailList,
-    subject: "JustEmail",
+    to: email,
+    subject: "Subscription confirm Email",
     html: letter,
   };
   try {

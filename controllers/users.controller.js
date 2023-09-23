@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { ctrlWrap, imageResize } = require("../helpers");
+const { ctrlWrap, imageResize, sendMail } = require("../helpers");
 const { User } = require("../models/user.model");
 const avatarsPath = path.join(__dirname, "../", "public", "avatars");
 
@@ -16,10 +16,11 @@ const getCurrent = async (req, res) => {
 };
 
 const subscribeEmail = async (req, res) => {
-  const { _id, email } = req.user;
+  const { _id, email, name } = req.user;
   const { subscription } = req.body;
   await User.findByIdAndUpdate(_id, { subscription });
-  res.json({ email, subscription });
+  await sendMail(email, name);
+  res.json({ _id, subscription });
 };
 
 const updateUser = async (req, res) => {
