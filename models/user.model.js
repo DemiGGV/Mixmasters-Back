@@ -94,12 +94,12 @@ const verifyEmailSchema = Joi.object({
 });
 
 const verifyNameSchema = Joi.object({
-  name: Joi.string().min(3).required().messages({
+  name: Joi.string().min(3).allow("").messages({
     "string.empty": `field name is not allowed to be empty`,
     "any.required": `missing required field name`,
     "string.min": `Name must be at least 3 symbol length`,
   }),
-  avatar: Joi.string().messages({
+  avatar: Joi.string().allow("").messages({
     "string.empty": `field avatar is not allowed to be empty`,
     "any.required": `missing required field avatar`,
   }),

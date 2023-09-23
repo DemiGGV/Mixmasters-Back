@@ -167,7 +167,7 @@
     "/api/users/update": {
       "patch": {
         "tags": ["Users"],
-        "summary": "Updates the username and avatar in the database.",
+        "summary": "Updates the username or avatar in the database.",
         "parameters": [],
         "security": [
           {
@@ -175,7 +175,7 @@
           }
         ],
         "requestBody": {
-          "description": "User object with an new name and image",
+          "description": "User object with an new name or image",
           "required": true,
           "content": {
             "multipart/form-data": {

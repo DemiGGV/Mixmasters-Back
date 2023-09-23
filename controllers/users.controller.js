@@ -33,16 +33,19 @@ const unsubscribeEmail = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { _id } = req.user;
-  const { name } = req.body;
-  const { path: tempUpload, originalname } = req.file;
-  await imageResize(tempUpload);
-  const newFileName = `${_id}_${originalname}`;
-  const avatarUploadPath = path.join(avatarsPath, newFileName);
-  await fs.rename(tempUpload, avatarUploadPath);
-
-  const avatarURL = path.join("avatars", newFileName);
-
+  let { _id, avatarURL } = req.user;
+  let { name } = req.body;
+  if (!name) {
+    name = req.user.name;
+  }
+  if (req.file) {
+    const { path: tempUpload, originalname } = req.file;
+    await imageResize(tempUpload);
+    const newFileName = `${_id}.${originalname.split(".").pop()}`;
+    const avatarUploadPath = path.join(avatarsPath, newFileName);
+    await fs.rename(tempUpload, avatarUploadPath);
+    avatarURL = path.join("avatars", newFileName);
+  }
   await User.findByIdAndUpdate(_id, { name, avatarURL });
   res.json({ name, avatarURL });
 };
