@@ -1,23 +1,19 @@
 const { HttpError, ctrlWrap } = require("../helpers");
-const { Recipe } = require("../models/recipe.model");
-// const { Ingridient } = require("../models/ingridient.model");
+const { Recipe, CATEGORIES, GLASSES } = require("../models/recipe.model");
+const { Ingridient } = require("../models/ingridient.model");
 
 const getCategories = async (req, res) => {
-  const result = await Recipe.distinct("category");
-  if (!result) throw HttpError(404, "Not Found");
-  res.json(result);
+  res.json(CATEGORIES);
 };
 
 const getIngridients = async (req, res) => {
-  const result = await Recipe.distinct("ingredients");
+  const result = await Ingridient.distinct("title").sort();
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
 
 const getGlasses = async (req, res) => {
-  const result = await Recipe.distinct("glass");
-  if (!result) throw HttpError(404, "Not Found");
-  res.json(result);
+  res.json(GLASSES);
 };
 
 const getRecipeById = async (req, res) => {
@@ -89,3 +85,47 @@ module.exports = {
 // "instructions":
 // "drinkThumb":
 // "ingredients": []
+
+// коктейль
+// const einendrink = [
+//   {
+//     _id: {},
+//     drink: "",
+//     category: "",
+//     alcoholic: "",
+//     glass: "",
+//     description: "",
+//     instructions: "",
+//     drinkThumb: "",
+//     ingredients: [
+//       {
+//         title: "Dark rum",
+//         measure: "1 1/2 oz ",
+//         ingredientId: {
+//           $oid: "64aebb7f82d96cc69e0eb4a7",
+//         },
+//       },
+//       {
+//         title: "Kahlua",
+//         measure: "1/2 oz ",
+//         ingredientId: {
+//           $oid: "64aebb7f82d96cc69e0eb4bd",
+//         },
+//       },
+//       {
+//         title: "Light cream",
+//         measure: "1 oz ",
+//         ingredientId: {
+//           $oid: "64f1d5c069d8333cf130fb31",
+//         },
+//       },
+//       {
+//         title: "Nutmeg",
+//         measure: "1/8 tsp grated ",
+//         ingredientId: {
+//           $oid: "64f1d5c069d8333cf130fb34",
+//         },
+//       },
+//     ],
+//   },
+// ];

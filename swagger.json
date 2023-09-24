@@ -282,7 +282,7 @@
           "birthdate": {
             "type": "string",
             "format": "date",
-            "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
+            "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[/]([0][1-9]|[1][0-2])[/] [1-9][0-9][0-9]{2}$/",
             "example": "10/10/2017",
             "description": "User's birthdate"
           },
@@ -325,6 +325,11 @@
                 "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
                 "example": "10/10/2017",
                 "description": "User's birthdate"
+              },
+              "isAdult": {
+                "type": "boolean",
+                "example": "true",
+                "description": "Determines whether the user is of legal age."
               },
               "avatarURL": {
                 "type": "string",
@@ -384,6 +389,11 @@
                 "example": "10/10/2017",
                 "description": "User's birthdate"
               },
+              "isAdult": {
+                "type": "boolean",
+                "example": "true",
+                "description": "Determines whether the user is of legal age."
+              },
               "avatarURL": {
                 "type": "string",
                 "description": "User's avatar",
@@ -439,6 +449,11 @@
             "pattern": "/^([1-2][0-9]|[0][1-9]|[3][0-1])[- /.]([0][1-9]|[1][0-2])[- /.][1-9][0-9][0-9]{2}$/",
             "example": "10/10/2017",
             "description": "User's birthdate"
+          },
+          "isAdult": {
+            "type": "boolean",
+            "example": "true",
+            "description": "Determines whether the user is of legal age."
           },
           "avatarURL": {
             "type": "string",

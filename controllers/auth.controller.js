@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const { HttpError, ctrlWrap } = require("../helpers");
+const { HttpError, ctrlWrap, isAdult } = require("../helpers");
 const { User } = require("../models/user.model");
 
 const { SECRET_KEY } = process.env;
@@ -25,6 +25,7 @@ const signup = async (req, res) => {
     ...req.body,
     password: hashPassword,
     avatarURL,
+    isAdult: isAdult(birthdate),
   });
   const payload = { id: newUser._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKENEXPIRE });
@@ -37,6 +38,7 @@ const signup = async (req, res) => {
       name,
       email,
       birthdate,
+      isAdult: isAdult(birthdate),
       avatarURL,
     },
   });
@@ -64,10 +66,14 @@ const signin = async (req, res) => {
   if (user.token) throw HttpError(422, "Already logined");
 
   // create jwt token and login user
+
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKENEXPIRE });
-  await User.findByIdAndUpdate(user._id, { token });
   const { _id, subscription, name, avatarURL, birthdate, createdAt } = user;
+  await User.findByIdAndUpdate(_id, {
+    token,
+    isAdult: isAdult(birthdate),
+  });
 
   res.json({
     token,
@@ -76,6 +82,7 @@ const signin = async (req, res) => {
       name,
       email,
       birthdate,
+      isAdult: isAdult(birthdate),
       avatarURL,
       subscription,
       createdAt,

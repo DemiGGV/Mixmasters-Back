@@ -5,13 +5,23 @@ const { User } = require("../models/user.model");
 const avatarsPath = path.join(__dirname, "../", "public", "avatars");
 
 const getCurrent = async (req, res) => {
-  const { _id, name, subscription, avatarURL, email, birthdate, createdAt } =
-    req.user;
+  const {
+    _id,
+    name,
+    subscription,
+    avatarURL,
+    email,
+    birthdate,
+    isAdult,
+    createdAt,
+  } = req.user;
+
   res.json({
     _id,
     name,
     email,
     birthdate,
+    isAdult,
     avatarURL,
     subscription,
     createdAt,
