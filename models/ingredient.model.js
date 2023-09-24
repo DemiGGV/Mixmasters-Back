@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 
 // Mongoose schema-model
-const ingridientDBSchema = new Schema(
+const ingredientDBSchema = new Schema(
   {
     title: {
       type: String,
@@ -41,8 +41,8 @@ const ingridientDBSchema = new Schema(
   }
 );
 
-ingridientDBSchema.post("save", handleMongooseError);
+ingredientDBSchema.post("save", handleMongooseError);
 
-const Ingridient = model("ingridient", ingridientDBSchema);
+const Ingredient = model("ingridient", ingredientDBSchema);
 
-module.exports = { Ingridient };
+module.exports = { Ingredient };

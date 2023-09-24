@@ -51,7 +51,7 @@ const GLASSES = [
 ];
 
 // Mongoose schema-model
-const ingridientDBSchema = new Schema(
+const recipeDBSchema = new Schema(
   {
     drink: {
       type: String,
@@ -109,8 +109,8 @@ const ingridientDBSchema = new Schema(
   }
 );
 
-ingridientDBSchema.post("save", handleMongooseError);
+recipeDBSchema.post("save", handleMongooseError);
 
-const Ingridient = model("contact", ingridientDBSchema);
+const Recipe = model("recipe", recipeDBSchema);
 
-module.exports = { Ingridient, CATEGORIES, GLASSES };
+module.exports = { Recipe, CATEGORIES, GLASSES };

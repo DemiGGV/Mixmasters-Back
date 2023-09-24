@@ -7,7 +7,7 @@ const swaggerDocument = require("./swagger.json");
 
 const authRouter = require("./routes/api/auth.route");
 const usersRouter = require("./routes/api/users.route");
-// const filtersRouter = require("./routes/api/filters.route");
+const filtersRouter = require("./routes/api/filters.route");
 // const recipesRouter = require("./routes/api/recipes.route");
 const { HttpError } = require("./helpers");
 
@@ -22,7 +22,7 @@ app.use(logger(formatsLogger));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
-// app.use("/api/filters", filtersRouter);
+app.use("/api/filters", filtersRouter);
 // app.use("/api/recipes", recipesRouter);
 
 // Error handler

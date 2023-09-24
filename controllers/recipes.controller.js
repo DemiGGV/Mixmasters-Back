@@ -1,18 +1,18 @@
 const { HttpError, ctrlWrap } = require("../helpers");
 const { Recipe, CATEGORIES, GLASSES } = require("../models/recipe.model");
-const { Ingridient } = require("../models/ingridient.model");
+const { Ingredient } = require("../models/ingredient.model");
 
-const getCategories = async (req, res) => {
+const getCategories = (req, res) => {
   res.json(CATEGORIES);
 };
 
-const getIngridients = async (req, res) => {
-  const result = await Ingridient.distinct("title").sort();
+const getIngredients = async (req, res) => {
+  const result = await Ingredient.distinct("title").sort();
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
 
-const getGlasses = async (req, res) => {
+const getGlasses = (req, res) => {
   res.json(GLASSES);
 };
 
@@ -25,7 +25,7 @@ const getRecipeById = async (req, res) => {
 
 module.exports = {
   getCategories: ctrlWrap(getCategories),
-  getIngridients: ctrlWrap(getIngridients),
+  getIngredients: ctrlWrap(getIngredients),
   getGlasses: ctrlWrap(getGlasses),
   getRecipeById: ctrlWrap(getRecipeById),
   // getRecipeById: ctrlWrap(getRecipeById),

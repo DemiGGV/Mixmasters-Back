@@ -23,6 +23,10 @@
     {
       "name": "Users",
       "description": "Users endpoints"
+    },
+    {
+      "name": "Filters",
+      "description": "Collection filters endpoints"
     }
   ],
   "paths": {
@@ -261,6 +265,90 @@
           }
         }
       }
+    },
+    "/api/filters/categories": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Extracting data about existing categories",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCategoriesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/filters/ingredients": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Extracting data about existing ingredients",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetIngredientsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/filters/glasses": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Extracting data about existing glasses",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGlassesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -328,7 +416,7 @@
               },
               "isAdult": {
                 "type": "boolean",
-                "example": "true",
+                "example": true,
                 "description": "Determines whether the user is of legal age."
               },
               "avatarURL": {
@@ -391,7 +479,7 @@
               },
               "isAdult": {
                 "type": "boolean",
-                "example": "true",
+                "example": true,
                 "description": "Determines whether the user is of legal age."
               },
               "avatarURL": {
@@ -452,7 +540,7 @@
           },
           "isAdult": {
             "type": "boolean",
-            "example": "true",
+            "example": true,
             "description": "Determines whether the user is of legal age."
           },
           "avatarURL": {
@@ -516,6 +604,30 @@
             "description": "User's subscription email",
             "format": "email"
           }
+        }
+      },
+      "GetCategoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Title name of category",
+          "example": "Coffee/Tea"
+        }
+      },
+      "GetIngredientsResponse": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Title name of ingredient",
+          "example": "Angostura bitters"
+        }
+      },
+      "GetGlassesResponse": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Title name of glass",
+          "example": "Cocktail glass"
         }
       }
     },
