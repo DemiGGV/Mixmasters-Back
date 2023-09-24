@@ -19,10 +19,10 @@ const getCurrent = async (req, res) => {
 };
 
 const subscribeEmail = async (req, res) => {
-  const { _id, email, name } = req.user;
+  const { _id, name } = req.user;
   const { subscription } = req.body;
   await User.findByIdAndUpdate(_id, { subscription });
-  await sendMail(email, name, _id);
+  await sendMail(subscription, name, _id);
   res.json({ _id, subscription });
 };
 
