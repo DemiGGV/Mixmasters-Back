@@ -2,12 +2,20 @@ const { HttpError, ctrlWrap } = require("../helpers");
 const { Recipe, CATEGORIES, GLASSES } = require("../models/recipe.model");
 const { Ingredient } = require("../models/ingredient.model");
 
+const SHAPE_RECIPE =
+  "drink category alcoholic glass description instructions drinkThumb ingredients";
+// Non alcoholic|Alcoholic
 const getCategories = (req, res) => {
   res.json(CATEGORIES);
 };
 
 const getIngredients = async (req, res) => {
-  const result = await Ingredient.distinct("title").sort();
+  console.log(req.user.isAdult);
+  const condition = !req.user.isAdult ? "No" : /^(?:Yes\b|No\b)/;
+  console.log(condition);
+  const result = await Ingredient.distinct("title", {
+    alcohol: condition,
+  }).sort();
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
@@ -17,8 +25,12 @@ const getGlasses = (req, res) => {
 };
 
 const getRecipeById = async (req, res) => {
-  const { recipeId } = req.params;
-  const result = await Recipe.findById(recipeId);
+  const { id } = req.params;
+  console.log(req.params);
+  const result = await Recipe.findById(id, SHAPE_RECIPE).populate(
+    "ingredients.ingredientId",
+    "ingredientThumb"
+  );
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };

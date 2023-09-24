@@ -63,6 +63,7 @@ const recipeDBSchema = new Schema(
     },
     category: {
       type: String,
+      enum: CATEGORIES,
       requred: [true, "Set category for recipe"],
     },
     IBA: {
@@ -75,6 +76,7 @@ const recipeDBSchema = new Schema(
     },
     glass: {
       type: String,
+      enum: GLASSES,
       requred: [true, "Set type glass for recipe"],
     },
     description: {
@@ -88,8 +90,16 @@ const recipeDBSchema = new Schema(
     },
     ingredients: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "ingridient",
+        tytle: {
+          type: String,
+        },
+        measure: {
+          type: String,
+        },
+        ingredientId: {
+          type: Schema.Types.ObjectId,
+          ref: "ingredient",
+        },
       },
     ],
     favorite: [
