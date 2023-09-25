@@ -2,6 +2,7 @@ const express = require("express");
 const ctrl = require("../../controllers/recipes.controller");
 
 const { isValidID, authenticate } = require("../../middlewares");
+const { HttpError } = require("../../helpers");
 // const { schemas } = require("../../models/recipe.model");
 
 const router = express.Router();
@@ -31,5 +32,23 @@ router.get("/:id", isValidID, authenticate, ctrl.getRecipeById);
 //   isValidID,
 //   ctrl.removeFavoritsDrink
 // );
+
+router.all(
+  [
+    "/:id",
+    "/mainpage",
+    "/popular",
+    "/search",
+    "/own",
+    "/own/add",
+    "/own/remove/:id",
+    "/favorite",
+    "/favorite/add",
+    "/favorite/remove/:id",
+  ],
+  (req, res, next) => {
+    next(HttpError(405));
+  }
+);
 
 module.exports = router;

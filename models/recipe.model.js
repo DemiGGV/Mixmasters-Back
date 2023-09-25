@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
 const CATEGORIES = [
   "Beer",
@@ -50,6 +51,7 @@ const GLASSES = [
   "Wine Glass",
 ];
 
+const ALCOHOL = ["Alcoholic", "Non alcoholic"];
 // Mongoose schema-model
 const recipeDBSchema = new Schema(
   {
@@ -72,6 +74,7 @@ const recipeDBSchema = new Schema(
     },
     alcoholic: {
       type: String,
+      enum: ALCOHOL,
       requred: [true, "Specify alcoholic or non-alcoholic recipe"],
     },
     glass: {
@@ -123,4 +126,73 @@ recipeDBSchema.post("save", handleMongooseError);
 
 const Recipe = model("recipe", recipeDBSchema);
 
-module.exports = { Recipe, CATEGORIES, GLASSES };
+// Joi validation
+//  DD-MM-YYYY или YYYY-MM-DD
+const recipeSchema = Joi.object({
+  drink: {
+    type: String,
+    requred: [true, "Set name for recipe"],
+  },
+  drinkAlternate: {
+    type: String,
+    default: "Sorry, not specified",
+  },
+  category: {
+    type: String,
+    enum: CATEGORIES,
+    requred: [true, "Set category for recipe"],
+  },
+  IBA: {
+    type: String,
+    default: "Sorry, not specified",
+  },
+  alcoholic: {
+    type: String,
+    enum: ALCOHOL,
+    requred: [true, "Specify alcoholic or non-alcoholic recipe"],
+  },
+  glass: {
+    type: String,
+    enum: GLASSES,
+    requred: [true, "Set type glass for recipe"],
+  },
+  description: {
+    type: String,
+  },
+  instructions: {
+    type: String,
+  },
+  drinkThumb: {
+    type: String,
+  },
+  ingredients: [
+    {
+      tytle: {
+        type: String,
+      },
+      measure: {
+        type: String,
+      },
+      ingredientId: {
+        type: Schema.Types.ObjectId,
+        ref: "ingredient",
+      },
+    },
+  ],
+  owner: Joi.string().required().messages({
+    "any.required": `missing required field recipe ObjectId`,
+  }),
+});
+
+const addDeleteIdSchema = Joi.object({
+  id: Joi.string().required().messages({
+    "any.required": `missing required field recipe ObjectId`,
+  }),
+});
+
+const schemas = {
+  recipeSchema,
+  addDeleteIdSchema,
+};
+
+module.exports = { Recipe, CATEGORIES, GLASSES, schemas };

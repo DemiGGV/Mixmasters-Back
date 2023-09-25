@@ -29,6 +29,7 @@ app.use("/api/recipes", recipesRouter);
 app.use((req, res, next) => {
   next(HttpError(404));
 });
+
 app.use((err, req, res, next) => {
   const { status = 500, message = "Internal Server Error" } = err;
   res.status(status).json({ message });

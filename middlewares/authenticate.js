@@ -5,6 +5,9 @@ const { User } = require("../models/user.model");
 const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
+  if (req.method !== "GET") {
+    HttpError(405);
+  }
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
