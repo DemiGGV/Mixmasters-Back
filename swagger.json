@@ -760,10 +760,10 @@
             "type": "array",
             "items": {
               "type": "string",
-              "format": "uuid"
-            },
-            "description": "Users ObjectId who like this recipe",
-            "example": "650ed66c400790d526bef3da"
+              "format": "uuid",
+              "description": "Users ObjectId who like this recipe",
+              "example": "650ed66c400790d526bef3da"
+            }
           },
           "owner": {
             "type": "string",
