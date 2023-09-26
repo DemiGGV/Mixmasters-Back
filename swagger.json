@@ -18,19 +18,19 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Authorization endpoints"
+      "description": "Authorization methods endpoints"
     },
     {
       "name": "Users",
-      "description": "Users endpoints"
+      "description": "Users methods endpoints"
     },
     {
       "name": "Filters",
-      "description": "Collection filters endpoints"
+      "description": "Filter collection endpoints"
     },
     {
-      "name": "Recipes",
-      "description": "Collection recipes endpoints"
+      "name": "Drinks",
+      "description": "Recipes collection endpoints"
     }
   ],
   "paths": {
@@ -354,9 +354,9 @@
         }
       }
     },
-    "/api/recipes/{id}": {
+    "/api/drinks/{id}": {
       "get": {
-        "tags": ["Recipes"],
+        "tags": ["Drinks"],
         "summary": "Extracting data about recipe with :id",
         "parameters": [
           {
@@ -755,6 +755,21 @@
                 }
               }
             }
+          },
+          "favorite": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Users ObjectId who like this recipe",
+            "example": "650ed66c400790d526bef3da"
+          },
+          "owner": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Users ObjectId who added this recipe",
+            "example": "650ed66c400790d526bef3da"
           }
         }
       },

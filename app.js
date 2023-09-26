@@ -23,7 +23,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/filters", filtersRouter);
-app.use("/api/recipes", recipesRouter);
+app.use("/api/drinks", recipesRouter);
 
 // Error handler
 app.use((req, res, next) => {

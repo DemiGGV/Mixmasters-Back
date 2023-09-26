@@ -58,7 +58,8 @@ userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 // Joi validation
-//  DD-MM-YYYY или YYYY-MM-DD
+//  DD-MM-YYYY
+
 const signupSchema = Joi.object({
   name: Joi.string().min(3).required().messages({
     "any.required": `missing required field name`,
