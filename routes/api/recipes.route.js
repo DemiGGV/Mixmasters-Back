@@ -15,7 +15,7 @@ const router = express.Router();
 router.get(
   "/mainpage",
   authenticate,
-  validateBody(schemas.countRecipesSchema),
+  validateQuery(schemas.countRecipesSchema),
   ctrl.mainPageRecipes
 );
 router.get("/popular", authenticate, ctrl.popularRecipes);

@@ -42,7 +42,7 @@ const mainPageRecipes = async (req, res) => {
     ? "Non alcoholic"
     : /^(?:Alcoholic\b|Non alcoholic\b)/;
 
-  const { count } = req.body;
+  const { count } = req.query;
   const result = await Recipe.aggregate()
     .match({ alcoholic: condition })
     .addFields({
