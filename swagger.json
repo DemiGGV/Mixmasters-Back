@@ -263,6 +263,10 @@
             "description": "Missing required field subscription",
             "content": {}
           },
+          "422": {
+            "description": "You can't use this e-mail address",
+            "content": {}
+          },
           "404": {
             "description": "Not found",
             "content": {}
@@ -704,6 +708,11 @@
           },
           "glass": { "$ref": "#/components/schemas/GlassesEnum" },
           "description": {
+            "type": "string",
+            "description": "Recipe description",
+            "example": "Apello is a citrusy and refreshing cocktail that..."
+          },
+          "shortDescription": {
             "type": "string",
             "description": "Recipe description",
             "example": "Apello is a citrusy and refreshing cocktail that..."

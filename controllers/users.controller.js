@@ -1,8 +1,5 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { ctrlWrap, imageResize, sendMail } = require("../helpers");
+const { ctrlWrap, sendMail, HttpError } = require("../helpers");
 const { User } = require("../models/user.model");
-const avatarsPath = path.join(__dirname, "../", "public", "avatars");
 
 const getCurrent = async (req, res) => {
   const {
@@ -31,6 +28,13 @@ const getCurrent = async (req, res) => {
 const subscribeEmail = async (req, res) => {
   const { _id, name } = req.user;
   const { subscription } = req.body;
+  const userWithSameSubscription = await User.findOne({
+    email: subscription,
+    _id: { $ne: _id },
+  });
+
+  if (userWithSameSubscription)
+    throw HttpError(422, "You can't use this e-mail address");
   await User.findByIdAndUpdate(_id, { subscription });
   await sendMail(subscription, name, _id);
   res.json({ _id, subscription });
@@ -48,14 +52,10 @@ const updateUser = async (req, res) => {
   if (!name) {
     name = req.user.name;
   }
-  if (req.file) {
-    const { path: tempUpload, originalname } = req.file;
-    await imageResize(tempUpload);
-    const newFileName = `${_id}.${originalname.split(".").pop()}`;
-    const avatarUploadPath = path.join(avatarsPath, newFileName);
-    await fs.rename(tempUpload, avatarUploadPath);
-    avatarURL = path.join("avatars", newFileName);
-  }
+  const getURL = async (req, res) => {
+    avatarURL = req.file.path;
+  };
+  if (req.file) getURL(req, res);
   await User.findByIdAndUpdate(_id, { name, avatarURL });
   res.json({ name, avatarURL });
 };

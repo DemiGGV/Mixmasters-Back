@@ -52,11 +52,13 @@ const GLASSES = [
 ];
 
 const ALCOHOL = ["Alcoholic", "Non alcoholic"];
+
 // Mongoose schema-model
 const recipeDBSchema = new Schema(
   {
     drink: {
       type: String,
+      unique: true,
       requred: [true, "Set name for recipe"],
     },
     drinkAlternate: {
@@ -83,6 +85,9 @@ const recipeDBSchema = new Schema(
       requred: [true, "Set type glass for recipe"],
     },
     description: {
+      type: String,
+    },
+    shortDescription: {
       type: String,
     },
     instructions: {
@@ -160,6 +165,10 @@ const addRecipeSchema = Joi.object({
     "string.empty": `empty value not allowed`,
     "any.required": `missing required field recipe ObjectId`,
   }),
+  shortDescription: Joi.string().empty().required().messages({
+    "string.empty": `empty value not allowed`,
+    "any.required": `missing required field recipe ObjectId`,
+  }),
   instructions: Joi.string().empty().required().messages({
     "string.empty": `empty value not allowed`,
     "any.required": `missing required field recipe ObjectId`,
@@ -194,8 +203,8 @@ const addDeleteIdSchema = Joi.object({
 });
 
 const countRecipesSchema = Joi.object({
-  count: Joi.string().valid("1", "2", "4").required().messages({
-    "any.only": `Only 1, 2 or 4 values were allowed for field 'count'`,
+  count: Joi.string().valid("1", "2", "3").required().messages({
+    "any.only": `Only 1, 2 or 3 values were allowed for field 'count'`,
     "any.required": `missing required field 'count' of recipes`,
   }),
 });

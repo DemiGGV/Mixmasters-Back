@@ -54,7 +54,6 @@ const mainPageRecipes = async (req, res) => {
     })
     .sort({
       category: 1,
-      favoritesLength: 1,
       drink: 1,
     })
     .group({
@@ -118,8 +117,7 @@ const popularRecipes = async (req, res) => {
       favoritesLength: 1,
     })
     .sort({
-      category: 1,
-      favoritesLength: 1,
+      favoritesLength: -1,
       drink: 1,
     })
     .exec();
@@ -202,7 +200,7 @@ const addFavoriteRecipe = async (req, res) => {
   const { id } = req.body;
   const result = await Recipe.findByIdAndUpdate(
     id,
-    { $push: { favorite: _id } },
+    { $addToSet: { favorite: _id } },
     { new: true },
     SHAPE_RECIPE
   );
@@ -242,7 +240,8 @@ const removeOwnRecipe = async (req, res) => {
 
 const addOwnRecipe = async (req, res) => {
   const { _id } = req.user;
-  const result = await Recipe.create({ ...req.body, owner: _id });
+  const drinkThumb = async (req, res) => req.file.path;
+  const result = await Recipe.create({ ...req.body, drinkThumb, owner: _id });
   if (!result) throw HttpError(404, "Not Found");
   res.status(201).json(result);
 };

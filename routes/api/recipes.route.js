@@ -4,8 +4,8 @@ const ctrl = require("../../controllers/recipes.controller");
 const {
   isValidID,
   authenticate,
-  validateBody,
   validateQuery,
+  upload,
 } = require("../../middlewares");
 const { HttpError } = require("../../helpers");
 const { schemas } = require("../../models/recipe.model");
@@ -29,22 +29,23 @@ router.get("/favorite", authenticate, ctrl.getFavoritsRecipes);
 router.post(
   "/favorite/add",
   authenticate,
-  validateBody(schemas.addDeleteIdSchema),
+  validateQuery(schemas.addDeleteIdSchema),
   ctrl.addFavoriteRecipe
 );
 router.delete(
   "/favorite/remove",
   authenticate,
-  validateBody(schemas.addDeleteIdSchema),
+  validateQuery(schemas.addDeleteIdSchema),
   ctrl.removeFavoritRecipe
 );
 router.get("/own", authenticate, ctrl.getOwnRecipes);
-// router.post(
-//   "/own/add",
-//   authenticate,
-//   validateBody(schemas.addRecipeSchema),
-//   ctrl.addOwnRecipe
-// );
+router.post(
+  "/own/add",
+  authenticate,
+  upload.single("cocktail"),
+  validateQuery(schemas.addRecipeSchema),
+  ctrl.addOwnRecipe
+);
 router.delete("/own/remove", authenticate, ctrl.removeOwnRecipe);
 
 router.get("/:id", authenticate, isValidID, ctrl.getRecipeById);
