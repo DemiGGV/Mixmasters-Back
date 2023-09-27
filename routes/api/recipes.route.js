@@ -47,7 +47,6 @@ router.post(
   ctrl.addOwnRecipe
 );
 router.delete("/own/remove", authenticate, ctrl.removeOwnRecipe);
-
 router.get("/:id", authenticate, isValidID, ctrl.getRecipeById);
 
 router.all(

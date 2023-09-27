@@ -86,12 +86,15 @@ const recipeDBSchema = new Schema(
     },
     description: {
       type: String,
+      requred: [true, "Set description for recipe"],
     },
     shortDescription: {
       type: String,
+      requred: [true, "Set short description for recipe"],
     },
     instructions: {
       type: String,
+      requred: [true, "Set short instructions for recipe"],
     },
     drinkThumb: {
       type: String,
@@ -147,6 +150,7 @@ const addRecipeSchema = Joi.object({
       "string.only": `only exact name of categories allowed`,
     }),
   IBA: Joi.string(),
+  tags: Joi.string(),
   alcoholic: Joi.string()
     .valid("Alcoholic", "Non alcoholic")
     .required()

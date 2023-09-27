@@ -1,5 +1,10 @@
 const { HttpError, ctrlWrap } = require("../helpers");
-const { Recipe, CATEGORIES, GLASSES } = require("../models/recipe.model");
+const {
+  Recipe,
+  CATEGORIES,
+  GLASSES,
+  schemas,
+} = require("../models/recipe.model");
 const { Ingredient } = require("../models/ingredient.model");
 
 const SHAPE_RECIPE =
@@ -232,17 +237,23 @@ const removeFavoritRecipe = async (req, res) => {
 };
 
 const removeOwnRecipe = async (req, res) => {
-  const { id } = req.body;
-  const result = await Recipe.findByIdAndRemove(id);
+  const { id: recipeId } = req.body;
+  const result = await Recipe.findByIdAndRemove(recipeId);
   if (!result) throw HttpError(404, "Not Found");
   res.status(204).json();
 };
 
 const addOwnRecipe = async (req, res) => {
-  const { _id } = req.user;
+  const { _id: userId } = req.user;
+  const recipeReq = JSON.parse(req.body.recipe);
   const drinkThumb = async (req, res) => req.file.path;
-  const result = await Recipe.create({ ...req.body, drinkThumb, owner: _id });
+  const recipeDB = { ...recipeReq, drinkThumb, owner: userId };
+  const { error } = schemas.addRecipeSchema.validate(recipeDB);
+  if (error) throw HttpError(400, error.message);
+
+  const result = await Recipe.create(recipeDB);
   if (!result) throw HttpError(404, "Not Found");
+
   res.status(201).json(result);
 };
 
