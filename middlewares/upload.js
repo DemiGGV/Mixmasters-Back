@@ -12,11 +12,12 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
-    const filename = path.parse(file.originalname).name;
+    let filename = path.parse(file.originalname).name;
     // Determine the folder based on file properties or request data
     let folder;
     if (file.fieldname === "avatar") {
       folder = "avatars";
+      filename = req.user._id;
     } else if (file.fieldname === "cocktail") {
       folder = "cocktails";
     } else {
