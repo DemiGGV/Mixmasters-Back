@@ -507,7 +507,7 @@
             "name": "limit",
             "in": "query",
             "description": "Number of recipes per page",
-            "example": "2",
+            "example": "10",
             "required": true,
             "schema": {
               "type": "number"
@@ -521,10 +521,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
-                  }
+                  "$ref": "#/components/schemas/SearchRecipeResponse"
                 }
               }
             }
@@ -642,19 +639,19 @@
       "delete": {
         "tags": ["Drinks"],
         "summary": "Removing your own recipe from the database.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "body",
-            "description": "ID of the recipe to be removed",
-            "example": "639b6de9ff77d221f190c50f",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "The ID of the recipe to remove.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/recipeIdRequest"
+              }
             }
           }
-        ],
-        "security": [{ "Bearer": [] }],
+        },
         "responses": {
           "204": {
             "description": "Successful operation. No content",
@@ -713,20 +710,20 @@
     "/api/drinks/favorite/add": {
       "post": {
         "tags": ["Drinks"],
-        "summary": "Adding recipe to favorites.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "body",
-            "description": "ID of the recipe to be removed",
-            "example": "639b6de9ff77d221f190c50f",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "summary": "Adding a recipe to favorites.",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "The ID of the recipe to add to favorites.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/recipeIdRequest"
+              }
             }
           }
-        ],
-        "security": [{ "Bearer": [] }],
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -756,20 +753,20 @@
     "/api/drinks/favorite/remove": {
       "delete": {
         "tags": ["Drinks"],
-        "summary": "Removing recipe from the favorites.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "body",
-            "description": "ID of the recipe to be removed",
-            "example": "639b6de9ff77d221f190c50f",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "summary": "Removing a recipe from favorites.",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Recipe Id for remove",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/recipeIdRequest"
+              }
             }
           }
-        ],
-        "security": [{ "Bearer": [] }],
+        },
         "responses": {
           "204": {
             "description": "Successful operation. No content",
@@ -1210,15 +1207,38 @@
           }
         }
       },
-      "GetMainpageRecipesResponse": {
+      "recipeIdRequest": {
+        "type": "object",
+        "required": ["id"],
         "properties": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/GetRecipeByIdResponse"
+          "id": {
+            "type": "string",
+            "example": "639b6de9ff77d221f190c50f",
+            "description": "Recipe ID"
           }
         }
       },
-      "RecipeSchema": {},
+      "SearchRecipeResponse": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number",
+            "description": "The number of documents in the collection that satisfy the condition.",
+            "example": "50"
+          },
+          "restPages": {
+            "type": "number",
+            "description": "The number of remaining pages in the collection that satisfy the condition and limits.",
+            "example": "4"
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetRecipeByIdResponse"
+            }
+          }
+        }
+      },
       "IngredientsEnum": {
         "type": "string",
         "enum": [

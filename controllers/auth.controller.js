@@ -5,7 +5,7 @@ const { HttpError, ctrlWrap, isUserAdult } = require("../helpers");
 const { User } = require("../models/user.model");
 
 const { SECRET_KEY } = process.env;
-const TOKENEXPIRE = "2d";
+const TOKENEXPIRE = "22d";
 
 const signup = async (req, res) => {
   const { name, email, birthdate, password } = req.body;

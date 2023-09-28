@@ -118,7 +118,7 @@ const popularRecipes = async (req, res) => {
 };
 const searchRecipes = async (req, res) => {
   const {
-    q: keyWord = null,
+    q: keyWord = "",
     page = 0,
     limit = 0,
     category = null,
@@ -131,7 +131,18 @@ const searchRecipes = async (req, res) => {
   const filterObj = {};
   if (category) filterObj.category = category.trim();
   if (ingredient) filterObj.ingredient = ingredient.trim();
+
+  // Count documents and calculating rest pages for front-end pagination
+  const count = await Recipe.countDocuments({
+    alcoholic: condition,
+    drink: {
+      $regex: keyWord,
+      $options: "i",
+    },
+    filterObj,
+  }).count("total");
   const skip = (page - 1) * limit;
+  const restPages = Math.ceil((count - skip) / limit) - 1;
 
   const result = await Recipe.aggregate()
     .match(
@@ -153,7 +164,7 @@ const searchRecipes = async (req, res) => {
     .exec();
 
   if (!result) throw HttpError(404, "Not Found");
-  res.json(result);
+  res.json({ count, restPages, result });
 };
 const getFavoritsRecipes = async (req, res) => {
   const { _id: userId } = req.user;
@@ -165,9 +176,10 @@ const getFavoritsRecipes = async (req, res) => {
 };
 const getOwnRecipes = async (req, res) => {
   const { _id: userId } = req.user;
-  const result = await Recipe.find({ owner: userId }, SHAPE_RECIPE).sort({
-    drink: 1,
-  });
+  const result = await Recipe.find({ owner: userId }, SHAPE_RECIPE);
+  //   .sort({
+  //   drink: 1,
+  // });
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
@@ -177,8 +189,7 @@ const addFavoriteRecipe = async (req, res) => {
   const result = await Recipe.findByIdAndUpdate(
     recipeId,
     { $addToSet: { favorite: userId } },
-    { new: true },
-    SHAPE_RECIPE
+    { new: true, select: SHAPE_RECIPE }
   );
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
@@ -186,21 +197,21 @@ const addFavoriteRecipe = async (req, res) => {
 const removeFavoritRecipe = async (req, res) => {
   const { _id: userId } = req.user;
   const { id: recipeId } = req.body;
-  let result = await Recipe.findByIdAndUpdate(
+  const result = await Recipe.findByIdAndUpdate(
     recipeId,
     {
       $pull: { favorite: userId },
     },
-    { new: true }
-  ).select(SHAPE_RECIPE);
+    { new: true, select: SHAPE_RECIPE }
+  );
 
   // remove empty field
   if (result.favorite.length === 0) {
-    result = await Recipe.findByIdAndUpdate(
+    await Recipe.findByIdAndUpdate(
       recipeId,
       { $unset: { favorite: 1 } },
       { new: true }
-    ).select(SHAPE_RECIPE);
+    );
   }
   if (!result) throw HttpError(404, "Not Found");
   res.status(204).json();
