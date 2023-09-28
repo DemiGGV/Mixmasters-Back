@@ -75,6 +75,10 @@
             "description": "Bad Request",
             "content": {}
           },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
           "409": {
             "description": "Email in use",
             "content": {}
@@ -233,6 +237,10 @@
           "401": {
             "description": "Not authorized",
             "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
           }
         }
       }
@@ -270,15 +278,15 @@
             }
           },
           "400": {
-            "description": "Missing required field subscription",
-            "content": {}
-          },
-          "422": {
-            "description": "You can't use this e-mail address",
+            "description": "Validation API error",
             "content": {}
           },
           "404": {
             "description": "Not found",
+            "content": {}
+          },
+          "422": {
+            "description": "You can't use this e-mail address",
             "content": {}
           }
         }
@@ -368,10 +376,178 @@
         }
       }
     },
+    "/api/drinks/mainpage": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get an array of recipes by category for the homepage.",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Number of recipes per category. Allowed only: 1, 2 or 3",
+            "example": "2",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "enum": [1, 2, 3]
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/popular": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get an array of popular recipes.",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/search": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get an array of recipes filtered by keyword, ingredient, recipe category. The array is formed page by page using the limit of recipes per page.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Part of the recipe name for the search query",
+            "required": false,
+            "example": "fe",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Select a category to filter the list of recipes.",
+            "required": false,
+            "example": "Cocktail",
+            "schema": {
+              "$ref": "#/components/schemas/CategoryEnum"
+            }
+          },
+          {
+            "name": "ingredient",
+            "in": "query",
+            "description": "Selecting an ingredient to filter the recipe list.",
+            "required": false,
+            "example": "Amaretto",
+            "schema": {
+              "$ref": "#/components/schemas/IngredientsEnum"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "example": "1",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of recipes per page",
+            "example": "2",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
     "/api/drinks/{id}": {
       "get": {
         "tags": ["Drinks"],
-        "summary": "Extracting data about recipe with :id",
+        "summary": "Retrieving a recipe from the database by :id",
         "parameters": [
           {
             "name": "id",
@@ -395,6 +571,248 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/own/add": {
+      "post": {
+        "tags": ["Drinks"],
+        "summary": "Adding your own recipe to the database.",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image file for the recipe",
+            "required": true
+          },
+          {
+            "name": "recipe",
+            "in": "formData",
+            "type": "string",
+            "description": "JSON representation of the recipe. Validated on the backend server.",
+            "required": true
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/own/remove": {
+      "delete": {
+        "tags": ["Drinks"],
+        "summary": "Removing your own recipe from the database.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "ID of the recipe to be removed",
+            "example": "639b6de9ff77d221f190c50f",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation. No content",
+            "content": {}
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/own": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get an array of the own recipes.",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/favorite/add": {
+      "post": {
+        "tags": ["Drinks"],
+        "summary": "Adding recipe to favorites.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "ID of the recipe to be removed",
+            "example": "639b6de9ff77d221f190c50f",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/favorite/remove": {
+      "delete": {
+        "tags": ["Drinks"],
+        "summary": "Removing recipe from the favorites.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "ID of the recipe to be removed",
+            "example": "639b6de9ff77d221f190c50f",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation. No content",
+            "content": {}
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/drinks/favorite": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get an array of favorite recipes.",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetRecipeByIdResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation API error",
+            "content": {}
           },
           "401": {
             "description": "Not authorized",
@@ -792,6 +1210,15 @@
           }
         }
       },
+      "GetMainpageRecipesResponse": {
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/GetRecipeByIdResponse"
+          }
+        }
+      },
+      "RecipeSchema": {},
       "IngredientsEnum": {
         "type": "string",
         "enum": [

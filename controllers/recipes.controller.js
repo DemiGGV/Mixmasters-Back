@@ -203,7 +203,7 @@ const removeFavoritRecipe = async (req, res) => {
     ).select(SHAPE_RECIPE);
   }
   if (!result) throw HttpError(404, "Not Found");
-  res.json(result);
+  res.status(204).json();
 };
 const removeOwnRecipe = async (req, res) => {
   const { id: recipeId } = req.body;
