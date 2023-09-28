@@ -3,7 +3,7 @@ const ctrl = require("../../controllers/users.controller");
 
 const { validateQuery, authenticate, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user.model");
-const { HttpError } = require("../../helpers");
+// const { HttpError } = require("../../helpers");
 
 const router = express.Router();
 
@@ -23,8 +23,8 @@ router.post(
 );
 router.get("/unsubscribe/:id", ctrl.unsubscribeEmail);
 
-router.all(["/current", "/update", "/subscribe"], (req, res, next) => {
-  next(HttpError(405));
-});
+// router.all(["/current", "/update", "/subscribe"], (req, res, next) => {
+//   next(HttpError(405));
+// });
 
 module.exports = router;

@@ -7,7 +7,7 @@ const {
   validateQuery,
   upload,
 } = require("../../middlewares");
-const { HttpError } = require("../../helpers");
+// const { HttpError } = require("../../helpers");
 const { schemas } = require("../../models/recipe.model");
 
 const router = express.Router();
@@ -49,22 +49,22 @@ router.post(
 router.delete("/own/remove", authenticate, ctrl.removeOwnRecipe);
 router.get("/:id", authenticate, isValidID, ctrl.getRecipeById);
 
-router.all(
-  [
-    "/:id",
-    "/mainpage",
-    "/popular",
-    "/search",
-    "/own",
-    "/own/add",
-    "/own/remove/:id",
-    "/favorite",
-    "/favorite/add",
-    "/favorite/remove/",
-  ],
-  (req, res, next) => {
-    next(HttpError(405));
-  }
-);
+// router.all(
+//   [
+//     "/:id",
+//     "/mainpage",
+//     "/popular",
+//     "/search",
+//     "/own",
+//     "/own/add",
+//     "/own/remove/:id",
+//     "/favorite",
+//     "/favorite/add",
+//     "/favorite/remove/",
+//   ],
+//   (req, res, next) => {
+//     next(HttpError(405));
+//   }
+// );
 
 module.exports = router;
