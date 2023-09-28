@@ -3,7 +3,7 @@ const HttpError = require("./httpError");
 const handleMongooseError = require("./handleMongooseError");
 const imageResize = require("./imageResize");
 const sendMail = require("./sendMail");
-const isAdult = require("./isAdult");
+const isUserAdult = require("./isUserAdult");
 
 module.exports = {
   ctrlWrap,
@@ -11,5 +11,5 @@ module.exports = {
   handleMongooseError,
   imageResize,
   sendMail,
-  isAdult,
+  isUserAdult,
 };

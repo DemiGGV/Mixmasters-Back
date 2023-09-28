@@ -1,10 +1,10 @@
 const cloudinary = require("cloudinary").v2;
-const { Drink } = require("../../models/drink");
+const { Recipe } = require("../../models/recipe.model");
 const fs = require("fs");
 const path = require("path");
 
 // шлях до папки з зображеннями
-const folderPath = path.join(__dirname, "./images");
+const folderPath = path.join(__dirname, "./images/drinks");
 
 // дані для аутентифікації в клаудинарії
 cloudinary.config({

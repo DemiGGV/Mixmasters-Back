@@ -7,14 +7,28 @@ const {
 } = require("../models/recipe.model");
 const { Ingredient } = require("../models/ingredient.model");
 
-const SHAPE_RECIPE =
-  "drink category alcoholic glass description instructions drinkThumb ingredients favorite own";
+// const SHAPE_RECIPE =
+//   "drink category alcoholic glass description shortDescription instructions drinkThumb ingredients favorite owner favoritesLength";
+const SHAPE_RECIPE_BD = {
+  drink: 1,
+  category: 1,
+  alcoholic: 1,
+  glass: 1,
+  description: 1,
+  shortDescription: 1,
+  instructions: 1,
+  drinkThumb: 1,
+  ingredients: 1,
+  favorite: 1,
+  owner: 1,
+  favoritesLength: 1,
+};
+const SHAPE_RECIPE = Object.keys(SHAPE_RECIPE_BD).join(" ");
 
 const getCategories = async (req, res) => {
   // const result = await Recipe.distinct("category").sort();
   res.json(CATEGORIES);
 };
-
 const getIngredients = async (req, res) => {
   const condition = !req.user.isAdult ? "No" : /^(?:Yes\b|No\b)/;
   const result = await Ingredient.find(
@@ -26,22 +40,19 @@ const getIngredients = async (req, res) => {
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const getGlasses = async (req, res) => {
   // const result = await Recipe.distinct("glass").sort();
   res.json(GLASSES);
 };
-
 const getRecipeById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Recipe.findById(id, SHAPE_RECIPE).populate(
+  const { id: recipeId } = req.params;
+  const result = await Recipe.findById(recipeId, SHAPE_RECIPE).populate(
     "ingredients.ingredientId",
     "ingredientThumb"
   );
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const mainPageRecipes = async (req, res) => {
   const condition = !req.user.isAdult
     ? "Non alcoholic"
@@ -77,25 +88,12 @@ const mainPageRecipes = async (req, res) => {
     })
     .unwind("$docs")
     .replaceRoot("$docs")
-    .project({
-      drink: 1,
-      category: 1,
-      alcoholic: 1,
-      glass: 1,
-      description: 1,
-      instructions: 1,
-      drinkThumb: 1,
-      ingredients: 1,
-      favorite: 1,
-      owner: 1,
-      favoritesLength: 1,
-    })
+    .project(SHAPE_RECIPE_BD)
     .exec();
 
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const popularRecipes = async (req, res) => {
   const condition = !req.user.isAdult
     ? "Non alcoholic"
@@ -108,19 +106,7 @@ const popularRecipes = async (req, res) => {
         $size: "$favorite",
       },
     })
-    .project({
-      drink: 1,
-      category: 1,
-      alcoholic: 1,
-      glass: 1,
-      description: 1,
-      instructions: 1,
-      drinkThumb: 1,
-      ingredients: 1,
-      favorite: 1,
-      owner: 1,
-      favoritesLength: 1,
-    })
+    .project(SHAPE_RECIPE_BD)
     .sort({
       favoritesLength: -1,
       drink: 1,
@@ -130,7 +116,6 @@ const popularRecipes = async (req, res) => {
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const searchRecipes = async (req, res) => {
   const {
     q: keyWord = null,
@@ -164,62 +149,47 @@ const searchRecipes = async (req, res) => {
     })
     .skip(+skip)
     .limit(+limit)
-    .project({
-      drink: 1,
-      category: 1,
-      alcoholic: 1,
-      glass: 1,
-      description: 1,
-      instructions: 1,
-      drinkThumb: 1,
-      ingredients: 1,
-      favorite: 1,
-      owner: 1,
-    })
+    .project(SHAPE_RECIPE_BD)
     .exec();
 
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const getFavoritsRecipes = async (req, res) => {
-  const { _id } = req.user;
-  const result = await Recipe.find({ favorite: _id }, SHAPE_RECIPE).sort({
+  const { _id: userId } = req.user;
+  const result = await Recipe.find({ favorite: userId }, SHAPE_RECIPE).sort({
     drink: 1,
   });
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const getOwnRecipes = async (req, res) => {
-  const { _id } = req.user;
-  const result = await Recipe.find({ owner: _id }, SHAPE_RECIPE).sort({
+  const { _id: userId } = req.user;
+  const result = await Recipe.find({ owner: userId }, SHAPE_RECIPE).sort({
     drink: 1,
   });
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const addFavoriteRecipe = async (req, res) => {
-  const { _id } = req.user;
-  const { id } = req.body;
+  const { _id: userId } = req.user;
+  const { id: recipeId } = req.body;
   const result = await Recipe.findByIdAndUpdate(
-    id,
-    { $addToSet: { favorite: _id } },
+    recipeId,
+    { $addToSet: { favorite: userId } },
     { new: true },
     SHAPE_RECIPE
   );
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const removeFavoritRecipe = async (req, res) => {
-  const { _id } = req.user;
-  const { id } = req.body;
+  const { _id: userId } = req.user;
+  const { id: recipeId } = req.body;
   let result = await Recipe.findByIdAndUpdate(
-    id,
+    recipeId,
     {
-      $pull: { favorite: _id },
+      $pull: { favorite: userId },
     },
     { new: true }
   ).select(SHAPE_RECIPE);
@@ -227,7 +197,7 @@ const removeFavoritRecipe = async (req, res) => {
   // remove empty field
   if (result.favorite.length === 0) {
     result = await Recipe.findByIdAndUpdate(
-      id,
+      recipeId,
       { $unset: { favorite: 1 } },
       { new: true }
     ).select(SHAPE_RECIPE);
@@ -235,22 +205,23 @@ const removeFavoritRecipe = async (req, res) => {
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
-
 const removeOwnRecipe = async (req, res) => {
   const { id: recipeId } = req.body;
   const result = await Recipe.findByIdAndRemove(recipeId);
   if (!result) throw HttpError(404, "Not Found");
   res.status(204).json();
 };
-
 const addOwnRecipe = async (req, res) => {
   const { _id: userId } = req.user;
   const recipeReq = JSON.parse(req.body.recipe);
   const drinkThumb = async (req, res) => req.file.path;
   const recipeDB = { ...recipeReq, drinkThumb, owner: userId };
+
+  // validate Recipe object
   const { error } = schemas.addRecipeSchema.validate(recipeDB);
   if (error) throw HttpError(400, error.message);
 
+  // adding new Recipe
   const result = await Recipe.create(recipeDB);
   if (!result) throw HttpError(404, "Not Found");
 

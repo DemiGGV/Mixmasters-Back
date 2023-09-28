@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const { HttpError, ctrlWrap, isAdult } = require("../helpers");
+const { HttpError, ctrlWrap, isUserAdult } = require("../helpers");
 const { User } = require("../models/user.model");
 
 const { SECRET_KEY } = process.env;
@@ -15,31 +15,33 @@ const signup = async (req, res) => {
   if (user) throw HttpError(409, "Email in use");
 
   // create user
+  const isAdult = isUserAdult(birthdate);
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email, {
     protocol: "https",
     s: "250",
     d: "wavatar",
   });
-  const newUser = await User.create({
+  const { _id: userId, createdAt } = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
-    isAdult: isAdult(birthdate),
+    isAdult,
   });
-  const payload = { id: newUser._id };
+  const payload = { id: userId };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKENEXPIRE });
-  await User.findByIdAndUpdate(newUser._id, { token });
+  await User.findByIdAndUpdate(userId, { token });
 
   res.status(201).json({
     token,
     user: {
-      _id: newUser._id,
+      _id: userId,
       name,
       email,
       birthdate,
-      isAdult: isAdult(birthdate),
+      isAdult,
       avatarURL,
+      createdAt,
     },
   });
 };
@@ -70,9 +72,10 @@ const signin = async (req, res) => {
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKENEXPIRE });
   const { _id, subscription, name, avatarURL, birthdate, createdAt } = user;
+  const isAdult = isUserAdult(birthdate);
   await User.findByIdAndUpdate(_id, {
     token,
-    isAdult: isAdult(birthdate),
+    isAdult,
   });
 
   res.json({
@@ -82,7 +85,7 @@ const signin = async (req, res) => {
       name,
       email,
       birthdate,
-      isAdult: isAdult(birthdate),
+      isAdult,
       avatarURL,
       subscription,
       createdAt,
@@ -91,8 +94,8 @@ const signin = async (req, res) => {
 };
 
 const signout = async (req, res) => {
-  const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: null });
+  const { _id: userId } = req.user;
+  await User.findByIdAndUpdate(userId, { token: null });
   res.status(204).json();
 };
 

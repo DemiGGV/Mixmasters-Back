@@ -60,7 +60,7 @@ router.all(
     "/own/remove/:id",
     "/favorite",
     "/favorite/add",
-    "/favorite/remove/:id",
+    "/favorite/remove/",
   ],
   (req, res, next) => {
     next(HttpError(405));

@@ -1,10 +1,10 @@
 const cloudinary = require("cloudinary").v2;
-const { Ingredient } = require("../../models/ingredient");
+const { Ingredient } = require("../../models/ingredient.model");
 const fs = require("fs");
 const path = require("path");
 
 // шлях до папки з зображеннями
-const folderPath = path.join(__dirname, "./images");
+const folderPath = path.join(__dirname, "./images/ingredient");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,

@@ -5,11 +5,11 @@ const getCurrent = async (req, res) => {
   const {
     _id,
     name,
-    subscription,
-    avatarURL,
     email,
     birthdate,
     isAdult,
+    avatarURL,
+    subscription,
     createdAt,
   } = req.user;
 

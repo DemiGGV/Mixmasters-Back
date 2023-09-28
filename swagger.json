@@ -3,7 +3,17 @@
   "info": {
     "version": "1.0.3",
     "title": "MixMasters backend",
-    "description": "Swagger documentation for MixMasters backend."
+    "description": "Swagger documentation for MixMasters backend.",
+    "termsOfService": "http://www.mixmasters.com/terms/",
+    "contact": {
+      "name": "MixMasters Support",
+      "url": "http://www.mixmasters.com/support",
+      "email": "support.mixmasters@example.com"
+    },
+    "license": {
+      "name": "Apache 2.0 license",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
   },
   "consumes": ["application/json", "multiparts/form-data"],
   "produces": ["application/json"],
