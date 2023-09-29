@@ -584,6 +584,7 @@
         }
       }
     },
+
     "/api/drinks/own/add": {
       "post": {
         "tags": ["Drinks"],
@@ -605,16 +606,18 @@
                   "cocktail": {
                     "type": "string",
                     "format": "binary",
-                    "description": "Recipe's image"
+                    "description": "Cocktail image"
                   }
-                }
+                },
+                "required": ["recipe", "cocktail"]
               }
             }
           }
         },
+
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "201": {
+            "description": "Created. Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -636,6 +639,10 @@
           },
           "404": {
             "description": "Not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Conflict",
             "content": {}
           }
         }
@@ -1130,7 +1137,7 @@
             "description": "Recipe's name",
             "example": "Quentin"
           },
-          "cathegory": { "$ref": "#/components/schemas/CategoryEnum" },
+          "category": { "$ref": "#/components/schemas/CategoryEnum" },
           "alcoholic": {
             "type": "string",
             "enum": ["Alcoholic", "Non alcoholic"],
@@ -1247,26 +1254,21 @@
       },
       "ObjectRecipeRequest": {
         "type": "object",
+        "description": "Recipe object",
         "properties": {
           "drink": {
             "type": "string",
             "description": "Recipe's name",
             "example": "Quentin"
           },
-          "cathegory": {
-            "$ref": "#/components/schemas/CategoryEnum",
-            "example": "Cocktail"
-          },
+          "category": { "$ref": "#/components/schemas/CategoryEnum" },
           "alcoholic": {
             "type": "string",
-            "enum": ["Alcoholic", "Non alcoholic"],
             "description": "Is it an alcoholic recipe or not?",
-            "example": "Non alcoholic"
+            "example": "Non alcoholic",
+            "enum": ["Alcoholic", "Non alcoholic"]
           },
-          "glass": {
-            "$ref": "#/components/schemas/GlassesEnum",
-            "example": "Cocktail glass"
-          },
+          "glass": { "$ref": "#/components/schemas/GlassesEnum" },
           "description": {
             "type": "string",
             "description": "Recipe description",
@@ -1281,36 +1283,30 @@
             "type": "string",
             "description": "Recipe preparation instructions",
             "example": "Stirr. Grnish with..."
-          }
-        },
-        "ingredients": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "ingredientId": {
-                "type": "string",
-                "description": "ObjectId of the ingredient in this Ingredients collection",
-                "example": "651138d8383b0acd30f1323c"
-              },
-              "title": {
-                "type": "string",
-                "description": "Title of the ingredient",
-                "example": "Grapefruit juice"
-              },
-              "measure": {
-                "type": "string",
-                "description": "Amount of ingredient required",
-                "example": "3 cl "
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ingredientId": {
+                  "type": "string",
+                  "description": "ObjectId of the ingredient in this Ingredients collection",
+                  "example": "651138d8383b0acd30f1323c"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the ingredient",
+                  "example": "Grapefruit juice"
+                },
+                "measure": {
+                  "type": "string",
+                  "description": "Amount of ingredient required",
+                  "example": "3 cl "
+                }
               }
             }
           }
-        },
-        "owner": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Users ObjectId who added this recipe",
-          "example": "650ed66c400790d526bef3da"
         }
       },
       "IngredientsEnum": {
@@ -1640,6 +1636,7 @@
           "Yukon Jack",
           "Zima"
         ],
+        "wrapped": true,
         "description": "Ingredients list for the recipe",
         "example": "Absinthe"
       },
@@ -1658,6 +1655,7 @@
           "Shot",
           "Soft Drink"
         ],
+        "wrapped": true,
         "description": "Categories list for the recipe",
         "example": "Cocktail"
       },
@@ -1697,6 +1695,7 @@
           "White wine glass",
           "Wine Glass"
         ],
+        "wrapped": true,
         "description": "Glasses list for the recipe",
         "example": "Cocktail glass"
       }

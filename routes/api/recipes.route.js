@@ -43,7 +43,6 @@ router.post(
   "/own/add",
   authenticate,
   upload.single("cocktail"),
-  validateQuery(schemas.addRecipeSchema),
   ctrl.addOwnRecipe
 );
 router.delete("/own/remove", authenticate, ctrl.removeOwnRecipe);

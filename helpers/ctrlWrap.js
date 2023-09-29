@@ -3,6 +3,9 @@ const ctrlWrap = (ctrl) => {
     try {
       await ctrl(req, res, next);
     } catch (error) {
+      if (error.message.includes("E11000")) {
+        error.message = "Field drink must have a unique value.";
+      }
       next(error);
     }
   };

@@ -180,7 +180,7 @@ const addRecipeSchema = Joi.object({
   drinkThumb: Joi.string(),
   ingredients: Joi.array().items(
     Joi.object({
-      tytle: Joi.string().empty().required().messages({
+      title: Joi.string().empty().required().messages({
         "string.empty": `empty value not allowed`,
         "any.required": `missing required field ingredient tytle`,
       }),
@@ -194,7 +194,7 @@ const addRecipeSchema = Joi.object({
       }),
     })
   ),
-  owner: Joi.string().empty().required().messages({
+  owner: Joi.object().empty().required().messages({
     "string.empty": `empty value not allowed`,
     "any.required": `missing required field recipe ObjectId`,
   }),

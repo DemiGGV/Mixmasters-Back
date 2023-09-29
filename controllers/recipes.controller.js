@@ -224,8 +224,12 @@ const removeOwnRecipe = async (req, res) => {
 };
 const addOwnRecipe = async (req, res) => {
   const { _id: userId } = req.user;
+  let drinkThumb = "";
   const recipeReq = JSON.parse(req.body.recipe);
-  const drinkThumb = async (req, res) => req.file.path;
+  const getURL = async (req, res) => {
+    drinkThumb = req.file.path;
+  };
+  if (req.file) getURL(req, res);
   const recipeDB = { ...recipeReq, drinkThumb, owner: userId };
 
   // validate Recipe object
