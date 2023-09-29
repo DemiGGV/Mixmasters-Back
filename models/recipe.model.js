@@ -222,13 +222,13 @@ const searchRecipeSchema = Joi.object({
       "any.only": `only exact name of categories allowed`,
     }),
   ingredient: Joi.string().allow(""),
-  page: Joi.string().required().messages({
-    "number.positive": `only positiv value allowed`,
-    "any.required": `missing required field 'page'`,
+  page: Joi.number().integer().required().messages({
+    "number.base": `field page must be a number`,
+    "any.required": `missing required field page`,
   }),
-  limit: Joi.string().required().messages({
-    "number.positive": `only positiv value allowed`,
-    "any.required": `missing required field 'limit'`,
+  limit: Joi.number().integer().required().messages({
+    "number.base": `field limit must be a number`,
+    "any.required": `missing required field limit`,
   }),
 })
   .unknown()
