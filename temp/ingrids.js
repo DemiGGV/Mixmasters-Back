@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-const { Ingredient } = require("../../models/ingredient.model");
+// const { Ingredient } = require("../models/ingredient.model");
 const fs = require("fs");
 const path = require("path");
 
@@ -21,7 +21,8 @@ const uploadFileToCloudinary = async (filePath, file) => {
       use_filename: true,
       unique_filename: false,
     });
-    console.log(`File ${filePath} uploaded to URL: ${result.url}`);
+    console.log(`File ${filePath} uploaded to URL:`);
+    console.warn(result.url);
   } catch (err) {
     console.error(`Failed to upload ${filePath}. Error: ${err.message}`);
   }
@@ -33,40 +34,42 @@ const getIngredients = async (req, res) => {
   // всі файли з твоєї локальної папки витягуються і відправляються на завантаження в клаудинарій
 
   const files = fs.readdirSync(folderPath);
-  for (const file of files) {
+  let counter = files.length;
+  for (let file of files) {
+    console.log(counter--);
     const fullFilePath = path.join(folderPath, file);
     if (fs.statSync(fullFilePath).isFile()) {
+      file = file.replace(/\.[^/.]+$/, "");
       await uploadFileToCloudinary(fullFilePath, file);
     }
   }
 
+  // оновлюєш усі елементи колекції. Для цього слід піти в cloudinary, зайти в папку drinks і скопіювати url будь-якого зображення. Після чого частину без назви файлу слід додати в наступний код
   // const updateResult = await Ingredient.updateMany({}, [
   //   {
   //     $set: {
   //       ingredientThumb: {
   //         $concat: [
-  //           'https://res.cloudinary.com/dzpjbw6lc/image/upload/v1695487694/ingredients/', // your base URL
-  //           { $arrayElemAt: [{ $split: ['$ingredientThumb', '/'] }, -1] },
-  //           '.png',
+  //           "https://res.cloudinary.com/dotun1fbg/image/upload/v1696062147/ingredients/", // your base URL
+  //           { $arrayElemAt: [{ $split: ["$ingredientThumb", "/"] }, -1] },
   //         ],
   //       },
-  //         'thumb-medium': {
+  //       "thumb-medium": {
   //         $concat: [
-  //           'https://res.cloudinary.com/dzpjbw6lc/image/upload/v1695487694/ingredients/', // your base URL
-  //           { $arrayElemAt: [{ $split: ['$thumb-medium', '/'] }, -1] },
-  //           '.png',
+  //           "https://res.cloudinary.com/dotun1fbg/image/upload/v1696062147/ingredients/", // your base URL
+  //           { $arrayElemAt: [{ $split: ["$thumb-medium", "/"] }, -1] },
   //         ],
   //       },
-  //           'thumb-small': {
+  //       "thumb-small": {
   //         $concat: [
-  //           'https://res.cloudinary.com/dzpjbw6lc/image/upload/v1695487694/ingredients/', // your base URL
-  //           { $arrayElemAt: [{ $split: ['$thumb-small', '/'] }, -1] },
-  //           '.png',
+  //           "https://res.cloudinary.com/dotun1fbg/image/upload/v1696062147/ingredients/", // your base URL
+  //           { $arrayElemAt: [{ $split: ["$thumb-small", "/"] }, -1] },
   //         ],
   //       },
   //     },
   //   },
   // ]);
+  // res.json({});
 };
 
 module.exports = getIngredients;

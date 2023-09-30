@@ -9,9 +9,13 @@ const {
 } = require("../../middlewares");
 // const { HttpError } = require("../../helpers");
 const { schemas } = require("../../models/recipe.model");
+const getDrinks = require("../../temp/drinks");
+const getIngredients = require("../../temp/ingrids");
 
 const router = express.Router();
 
+router.get("/updateRecipes", authenticate, getDrinks);
+router.get("/updateIngredients", authenticate, getIngredients);
 router.get(
   "/mainpage",
   authenticate,
