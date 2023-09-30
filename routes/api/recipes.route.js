@@ -9,13 +9,15 @@ const {
 } = require("../../middlewares");
 // const { HttpError } = require("../../helpers");
 const { schemas } = require("../../models/recipe.model");
-const getDrinks = require("../../temp/drinks");
-const getIngredients = require("../../temp/ingrids");
 
 const router = express.Router();
 
-router.get("/updateRecipes", authenticate, getDrinks);
-router.get("/updateIngredients", authenticate, getIngredients);
+// эти роуты для автоматической загрузки базы изображений и апдейта базы данных
+// const getDrinks = require("../../temp/drinks");
+// const getIngredients = require("../../temp/ingrids");
+// router.get("/updateRecipes", authenticate, getDrinks);
+// router.get("/updateIngredients", authenticate, getIngredients);
+
 router.get(
   "/mainpage",
   authenticate,

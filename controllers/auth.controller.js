@@ -65,7 +65,7 @@ const signin = async (req, res) => {
   });
 
   // checking if user logined
-  if (user.token) throw HttpError(422, "Already logined");
+  // if (user.token) throw HttpError(422, "Already logined");
 
   // create jwt token and login user
 
