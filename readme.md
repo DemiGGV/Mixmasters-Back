@@ -16,11 +16,13 @@ This is the backend server for the Mixmasters project. It is built in a Node.js 
 To get started with the Mixmasters-Back project, follow these steps:
 
 1. Clone the repository to your local machine:
-   "git clone https://github.com/DemiGGV/Mixmasters-Back.git"
+
+- "git clone https://github.com/DemiGGV/Mixmasters-Back.git"
 
 2. Install the required dependencies using npm or yarn.
-   "npm install"
-   "yarn"
+
+- "npm install"
+- "yarn"
 
 ## Developer Information:
 

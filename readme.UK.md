@@ -16,11 +16,13 @@
 Для початку роботи з проектом Mixmasters-Back виконайте такі кроки:
 
 1. Клонуйте репозиторій на свій локальний комп'ютер.
-   "git clone https://github.com/DemiGGV/Mixmasters-Back.git"
+
+- "git clone https://github.com/DemiGGV/Mixmasters-Back.git"
 
 2. Встановіть необхідні залежності за допомогою npm або yarn.
-   "npm install"
-   "yarn"
+
+- "npm install"
+- "yarn"
 
 # Інформація про розробника.
 
