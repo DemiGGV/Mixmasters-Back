@@ -1,6 +1,6 @@
 Description
 
-This is the backend server for the Mixmasters project. It is built using Node.js with the Express framework and uses MongoDB as the database. The project also integrates Mongoose for handling database operations, Swagger for API documentation, and Cloudinary for cloud-based image storage.
+This is the backend server for the Mixmasters project. It is built in a Node.js environment with the Express framework and uses MongoDB as the database. The project also integrates Mongoose for handling database operations, Swagger for API documentation and testing, and Cloudinary for cloud-based image storage.
 
 Technologies Used:
 
@@ -14,8 +14,17 @@ Technologies Used:
 Getting Started
 To get started with the Mixmasters-Back project, follow these steps:
 
-Clone the repository to your local machine:
+1. Clone the repository to your local machine:
+   "git clone https://github.com/DemiGGV/Mixmasters-Back.git"
 
-"git clone https://github.com/DemiGGV/Mixmasters-Back.git"
+2. Install the required dependencies using npm or yarn.
+   "npm install"
+   "yarn"
 
-Install the required dependencies using npm or yarn.
+Developer Information:
+
+- Developer: Heorhii Honcharov.
+- Course: "Full Stack Developer"
+- School: GoIT
+- Stream: 77 (Потік 77)
+- Group: 5 (Група 5)
