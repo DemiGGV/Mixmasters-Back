@@ -7,8 +7,6 @@ const {
 } = require("../models/recipe.model");
 const { Ingredient } = require("../models/ingredient.model");
 
-// const SHAPE_RECIPE =
-//   "drink category alcoholic glass description shortDescription instructions drinkThumb ingredients favorite owner favoritesLength";
 const SHAPE_RECIPE_BD = {
   drink: 1,
   category: 1,
@@ -139,7 +137,7 @@ const searchRecipes = async (req, res) => {
       $regex: keyWord,
       $options: "i",
     },
-    filterObj,
+    ...filterObj,
   }).count("total");
   const skip = (page - 1) * limit;
   const restPages = Math.ceil((count - skip) / limit) - 1;

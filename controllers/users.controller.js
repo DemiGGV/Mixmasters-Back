@@ -43,7 +43,7 @@ const subscribeEmail = async (req, res) => {
 const unsubscribeEmail = async (req, res) => {
   const { id } = req.params;
   await User.findByIdAndUpdate(id, { subscription: null });
-  res.redirect("https://vasyl24.github.io/mixmasters/");
+  res.redirect(process.env.HOME_PAGE);
 };
 
 const updateUser = async (req, res) => {

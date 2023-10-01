@@ -58,7 +58,6 @@ userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 // Joi validation
-//  DD-MM-YYYY
 
 const signupSchema = Joi.object({
   name: Joi.string().min(3).required().messages({
@@ -66,12 +65,16 @@ const signupSchema = Joi.object({
     "string.min": `Name must be at least 3 symbol length`,
   }),
   birthdate: Joi.string().pattern(BIRTHDAYPATTERN).required().messages({
-    "any.required": `missing required field birthdate`,
-    "string.pattern.base": `wrong birthdate`,
+    "string.base": `The birthday must be a string`,
+    "any.required": `The birthday field is required`,
+    "string.empty": `The birthday must not be empty`,
+    "string.pattern.base": `The birthday must be in format DD-MM-YYYY`,
   }),
   email: Joi.string().pattern(EMAILPATTERN).required().messages({
-    "any.required": `missing required field email`,
-    "string.pattern.base": `wrong email`,
+    "string.base": `The email must be a string`,
+    "any.required": `The email field is required`,
+    "string.empty": `The email must not be empty`,
+    "string.pattern.base": "The email must be in format test@gmail.com.",
   }),
   password: Joi.string().min(6).required().messages({
     "any.required": `missing required field password`,
