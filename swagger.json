@@ -19,10 +19,10 @@
   "produces": ["application/json"],
   "servers": [
     {
-      "url": "https://mixmasters.onrender.com"
+      "url": "https://mixmasters.onrender.com/api"
     },
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000/api"
     }
   ],
   "tags": [
@@ -44,7 +44,7 @@
     }
   ],
   "paths": {
-    "/api/auth/signup": {
+    "/auth/signup": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration endpoint",
@@ -86,7 +86,7 @@
         }
       }
     },
-    "/api/auth/signin": {
+    "/auth/signin": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login endpoint",
@@ -132,7 +132,7 @@
         }
       }
     },
-    "/api/auth/signout": {
+    "/auth/signout": {
       "post": {
         "tags": ["Auth"],
         "summary": "Current user logout endpoint",
@@ -158,7 +158,7 @@
         }
       }
     },
-    "/api/users/current": {
+    "/users/current": {
       "get": {
         "tags": ["Users"],
         "summary": "Retrieving data about the current user",
@@ -186,7 +186,7 @@
         }
       }
     },
-    "/api/users/update": {
+    "/users/update": {
       "patch": {
         "tags": ["Users"],
         "summary": "Updates the username or avatar in the database.",
@@ -245,7 +245,7 @@
         }
       }
     },
-    "/api/users/subscribe": {
+    "/users/subscribe": {
       "post": {
         "tags": ["Users"],
         "summary": "User subscription to a mailing endpoint with e-mail notification to a specified address",
@@ -292,7 +292,7 @@
         }
       }
     },
-    "/api/filters/categories": {
+    "/filters/categories": {
       "get": {
         "tags": ["Filters"],
         "summary": "Extracting data about existing categories",
@@ -320,7 +320,7 @@
         }
       }
     },
-    "/api/filters/ingredients": {
+    "/filters/ingredients": {
       "get": {
         "tags": ["Filters"],
         "summary": "Extracting data about existing ingredients",
@@ -348,7 +348,7 @@
         }
       }
     },
-    "/api/filters/glasses": {
+    "/filters/glasses": {
       "get": {
         "tags": ["Filters"],
         "summary": "Extracting data about existing glasses",
@@ -376,7 +376,7 @@
         }
       }
     },
-    "/api/drinks/mainpage": {
+    "/drinks/mainpage": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get an array of recipes by category for the homepage.",
@@ -423,7 +423,7 @@
         }
       }
     },
-    "/api/drinks/popular": {
+    "/drinks/popular": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get an array of popular recipes.",
@@ -458,7 +458,7 @@
         }
       }
     },
-    "/api/drinks/search": {
+    "/drinks/search": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get an array of recipes filtered by keyword, ingredient, recipe category. The array is formed page by page using the limit of recipes per page.",
@@ -541,7 +541,7 @@
         }
       }
     },
-    "/api/drinks/{id}": {
+    "/drinks/{id}": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Retrieving a recipe from the database by :id",
@@ -584,8 +584,7 @@
         }
       }
     },
-
-    "/api/drinks/own/add": {
+    "/drinks/own/add": {
       "post": {
         "tags": ["Drinks"],
         "summary": "Adding your own recipe to the database.",
@@ -648,7 +647,7 @@
         }
       }
     },
-    "/api/drinks/own/remove": {
+    "/drinks/own/remove": {
       "delete": {
         "tags": ["Drinks"],
         "summary": "Removing your own recipe from the database.",
@@ -678,6 +677,10 @@
             "description": "Not authorized",
             "content": {}
           },
+          "403": {
+            "description": "Forbiden",
+            "content": {}
+          },
           "404": {
             "description": "Not found",
             "content": {}
@@ -685,7 +688,7 @@
         }
       }
     },
-    "/api/drinks/own": {
+    "/drinks/own": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get an array of the own recipes.",
@@ -720,7 +723,7 @@
         }
       }
     },
-    "/api/drinks/favorite/add": {
+    "/drinks/favorite/add": {
       "post": {
         "tags": ["Drinks"],
         "summary": "Adding a recipe to favorites.",
@@ -763,7 +766,7 @@
         }
       }
     },
-    "/api/drinks/favorite/remove": {
+    "/drinks/favorite/remove": {
       "delete": {
         "tags": ["Drinks"],
         "summary": "Removing a recipe from favorites.",
@@ -800,7 +803,7 @@
         }
       }
     },
-    "/api/drinks/favorite": {
+    "/drinks/favorite": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get an array of favorite recipes.",
@@ -1058,7 +1061,7 @@
               },
               "avatarURL": {
                 "type": "string",
-                "example": "//www.gravatar.com/avatar/395df683fb7c0f1aad22dbf40031517a?s=200&d=identicon",
+                "example": "https://res.cloudinary.com/dotun1fbg/image/upload/v1696179992/avatars/6519a6cb104d7f54cf485827.jpg",
                 "description": "User's avatar URL"
               }
             }

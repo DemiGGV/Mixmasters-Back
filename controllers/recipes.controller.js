@@ -174,10 +174,9 @@ const getFavoritsRecipes = async (req, res) => {
 };
 const getOwnRecipes = async (req, res) => {
   const { _id: userId } = req.user;
-  const result = await Recipe.find({ owner: userId }, SHAPE_RECIPE);
-  //   .sort({
-  //   drink: 1,
-  // });
+  const result = await Recipe.find({ owner: userId }, SHAPE_RECIPE).sort({
+    drink: 1,
+  });
   if (!result) throw HttpError(404, "Not Found");
   res.json(result);
 };
@@ -215,7 +214,11 @@ const removeFavoritRecipe = async (req, res) => {
   res.status(204).json();
 };
 const removeOwnRecipe = async (req, res) => {
+  // erasing cloudinary image!
+  const { _id: userId } = req.user;
   const { id: recipeId } = req.body;
+  const doc = await Recipe.findOne({ _id: recipeId, owner: userId });
+  if (!doc) throw HttpError(403);
   const result = await Recipe.findByIdAndRemove(recipeId);
   if (!result) throw HttpError(404, "Not Found");
   res.status(204).json();
