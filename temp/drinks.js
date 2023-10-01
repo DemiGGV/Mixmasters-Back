@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-// const { Recipe } = require("../models/recipe.model");
+const { Recipe } = require("../models/recipe.model");
 const fs = require("fs");
 const path = require("path");
 
@@ -14,8 +14,8 @@ cloudinary.config({
 });
 
 const uploadFileToCloudinary = async (filePath, file) => {
+  // записуються файли у папку drinks зі своїм оригінальним імʼям
   try {
-    // записуються файли у папку drinks зі своїм оригінальним імʼям
     const result = await cloudinary.uploader.upload(filePath, {
       folder: "cocktails",
       public_id: file,
@@ -30,7 +30,7 @@ const uploadFileToCloudinary = async (filePath, file) => {
 };
 
 const getDrinks = async (req, res) => {
-  // всі файли з твоєї локальної папки витягуються і відправляються на завантаження в клаудинарій
+  // 1 этап. Всі файли з твоєї локальної папки витягуються і відправляються на завантаження в клаудинарій
 
   const files = fs.readdirSync(folderPath);
   let counter = files.length;
@@ -43,7 +43,7 @@ const getDrinks = async (req, res) => {
     }
   }
 
-  // оновлюєш усі елементи колекції. Для цього слід піти в cloudinary, зайти в папку drinks і скопіювати url будь-якого зображення. Після чого частину без назви файлу слід додати в наступний код
+  // 2 этап. Оновлюєш усі елементи колекції. Для цього слід піти в cloudinary, зайти в папку drinks і скопіювати url будь-якого зображення. Після чого частину без назви файлу слід додати в наступний код
 
   // const updateResult = await Recipe.updateMany({}, [
   //   {

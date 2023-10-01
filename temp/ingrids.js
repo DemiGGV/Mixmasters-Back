@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-// const { Ingredient } = require("../models/ingredient.model");
+const { Ingredient } = require("../models/ingredient.model");
 const fs = require("fs");
 const path = require("path");
 
@@ -31,7 +31,7 @@ const uploadFileToCloudinary = async (filePath, file) => {
 // мені зручно робити контрольвані дії, тому я додаю тимчасову логіку зазвичай в якийсь публічний ендпоінт і за потреби активую виклик через постмен
 
 const getIngredients = async (req, res) => {
-  // всі файли з твоєї локальної папки витягуються і відправляються на завантаження в клаудинарій
+  // 1 этап. Всі файли з твоєї локальної папки витягуються і відправляються на завантаження в клаудинарій
 
   const files = fs.readdirSync(folderPath);
   let counter = files.length;
@@ -44,7 +44,8 @@ const getIngredients = async (req, res) => {
     }
   }
 
-  // оновлюєш усі елементи колекції. Для цього слід піти в cloudinary, зайти в папку drinks і скопіювати url будь-якого зображення. Після чого частину без назви файлу слід додати в наступний код
+  // 2 этап. Оновлюєш усі елементи колекції. Для цього слід піти в cloudinary, зайти в папку drinks і скопіювати url будь-якого зображення. Після чого частину без назви файлу слід додати в наступний код
+
   // const updateResult = await Ingredient.updateMany({}, [
   //   {
   //     $set: {
