@@ -101,7 +101,7 @@ const recipeDBSchema = new Schema(
     },
     ingredients: [
       {
-        tytle: {
+        title: {
           type: String,
         },
         measure: {

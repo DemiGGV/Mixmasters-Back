@@ -115,20 +115,20 @@ const popularRecipes = async (req, res) => {
   res.json(result);
 };
 const searchRecipes = async (req, res) => {
-  const {
+  let {
     q: keyWord = "",
     page,
     limit,
-    category = null,
-    ingredient = null,
+    category = "",
+    ingredient = "",
   } = req.query;
   const condition = !req.user.isAdult
     ? "Non alcoholic"
     : /^(?:Alcoholic\b|Non alcoholic\b)/;
 
-  const filterObj = {};
-  if (category) filterObj.category = category.trim();
-  if (ingredient) filterObj.ingredient = ingredient.trim();
+  const ingredients = {};
+  if (category) category = category.trim();
+  if (ingredient) ingredients.title = ingredient.trim();
 
   // Count documents and calculating rest pages for front-end pagination
   const count = await Recipe.countDocuments({
@@ -137,8 +137,17 @@ const searchRecipes = async (req, res) => {
       $regex: keyWord,
       $options: "i",
     },
-    ...filterObj,
+    category,
+    ingredients: {
+      $elemMatch: {
+        title: {
+          $regex: ingredient,
+          $options: "i",
+        },
+      },
+    },
   }).count("total");
+  console.log(count, ingredients);
   const skip = (page - 1) * limit;
   const restPages = !count ? 0 : Math.ceil((count - skip) / limit) - 1;
 
@@ -149,7 +158,15 @@ const searchRecipes = async (req, res) => {
         $regex: keyWord,
         $options: "i",
       },
-      ...filterObj,
+      category,
+      ingredients: {
+        $elemMatch: {
+          title: {
+            $regex: ingredient,
+            $options: "i",
+          },
+        },
+      },
     })
     .sort({
       drink: 1,
