@@ -137,22 +137,21 @@ const searchRecipes = async (req, res) => {
       $regex: keyWord,
       $options: "i",
     },
-    filterObj,
+    ...filterObj,
   }).count("total");
+  console.log(count);
   const skip = (page - 1) * limit;
-  const restPages = Math.ceil((count - skip) / limit) - 1;
+  const restPages = !count ? 0 : Math.ceil((count - skip) / limit) - 1;
 
   const result = await Recipe.aggregate()
-    .match(
-      {
-        alcoholic: condition,
-        drink: {
-          $regex: keyWord,
-          $options: "i",
-        },
+    .match({
+      alcoholic: condition,
+      drink: {
+        $regex: keyWord,
+        $options: "i",
       },
-      filterObj
-    )
+      ...filterObj,
+    })
     .sort({
       drink: 1,
     })
