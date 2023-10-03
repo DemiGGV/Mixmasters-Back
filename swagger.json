@@ -507,7 +507,7 @@
             "name": "limit",
             "in": "query",
             "description": "Number of recipes per page",
-            "example": "10",
+            "example": "9",
             "required": true,
             "schema": {
               "type": "number"
