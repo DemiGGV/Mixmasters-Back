@@ -117,8 +117,8 @@ const popularRecipes = async (req, res) => {
 const searchRecipes = async (req, res) => {
   const {
     q: keyWord = "",
-    page = 0,
-    limit = 0,
+    page = 1,
+    limit = 1,
     category = null,
     ingredient = null,
   } = req.query;
