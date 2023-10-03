@@ -137,7 +137,10 @@ const searchRecipes = async (req, res) => {
       $regex: keyWord,
       $options: "i",
     },
-    category,
+    category: {
+      $regex: category,
+      $options: "i",
+    },
     ingredients: {
       $elemMatch: {
         title: {
@@ -158,7 +161,10 @@ const searchRecipes = async (req, res) => {
         $regex: keyWord,
         $options: "i",
       },
-      category,
+      category: {
+        $regex: category,
+        $options: "i",
+      },
       ingredients: {
         $elemMatch: {
           title: {
