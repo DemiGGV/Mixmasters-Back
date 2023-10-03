@@ -1295,7 +1295,7 @@
                 "ingredientId": {
                   "type": "string",
                   "description": "ObjectId of the ingredient in this Ingredients collection",
-                  "example": "651138d8383b0acd30f1323c"
+                  "example": "64aebb7f82d96cc69e0eb4a4"
                 },
                 "title": {
                   "type": "string",

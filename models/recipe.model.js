@@ -59,7 +59,7 @@ const recipeDBSchema = new Schema(
     drink: {
       type: String,
       unique: true,
-      requred: [true, "Set name for recipe"],
+      required: [true, "Set name for recipe"],
     },
     drinkAlternate: {
       type: String,
@@ -68,7 +68,7 @@ const recipeDBSchema = new Schema(
     category: {
       type: String,
       enum: CATEGORIES,
-      requred: [true, "Set category for recipe"],
+      required: [true, "Set category for recipe"],
     },
     IBA: {
       type: String,
@@ -77,30 +77,31 @@ const recipeDBSchema = new Schema(
     alcoholic: {
       type: String,
       enum: ALCOHOL,
-      requred: [true, "Specify alcoholic or non-alcoholic recipe"],
+      required: [true, "Specify alcoholic or non-alcoholic recipe"],
     },
     glass: {
       type: String,
       enum: GLASSES,
-      requred: [true, "Set type glass for recipe"],
+      required: [true, "Set type glass for recipe"],
     },
     description: {
       type: String,
-      requred: [true, "Set description for recipe"],
+      required: [true, "Set description for recipe"],
     },
     shortDescription: {
       type: String,
-      requred: [true, "Set short description for recipe"],
+      required: [true, "Set short description for recipe"],
     },
     instructions: {
       type: String,
-      requred: [true, "Set short instructions for recipe"],
+      required: [true, "Set short instructions for recipe"],
     },
     drinkThumb: {
       type: String,
     },
     ingredients: [
       {
+        _id: false,
         title: {
           type: String,
         },
