@@ -20,6 +20,6 @@ router.post(
   validateQuery(schemas.verifyEmailSchema),
   ctrl.subscribeEmail
 );
-router.patch("/unsubscribe/:id", ctrl.unsubscribeEmail);
+router.get("/unsubscribe/:mail", ctrl.unsubscribeEmail);
 
 module.exports = router;

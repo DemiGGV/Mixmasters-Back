@@ -41,8 +41,8 @@ const subscribeEmail = async (req, res) => {
 };
 
 const unsubscribeEmail = async (req, res) => {
-  const { id } = req.params;
-  await User.findByIdAndUpdate(id, { subscription: null });
+  const { mail } = req.params;
+  await User.findByIdAndUpdate(mail, { subscription: null });
   res.redirect(process.env.HOME_PAGE);
 };
 
