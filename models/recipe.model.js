@@ -222,14 +222,14 @@ const searchRecipeSchema = Joi.object({
       "any.only": `only exact name of categories allowed`,
     }),
   ingredient: Joi.string().allow(""),
-  page: Joi.number().integer().min(0).required().messages({
+  page: Joi.number().integer().min(1).required().messages({
     "number.base": `field page must be a number`,
-    "number.min": `field page must be greater than or equal to 0`,
+    "number.min": `field page must be greater than or equal to 1`,
     "any.required": `missing required field page`,
   }),
-  limit: Joi.number().integer().min(0).required().messages({
+  limit: Joi.number().integer().min(9).required().messages({
     "number.base": `field limit must be a number`,
-    "number.min": `field page must be greater than or equal to 0`,
+    "number.min": `field limit must be greater than or equal to 9`,
     "any.required": `missing required field limit`,
   }),
 })

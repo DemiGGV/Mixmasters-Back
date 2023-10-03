@@ -117,8 +117,8 @@ const popularRecipes = async (req, res) => {
 const searchRecipes = async (req, res) => {
   const {
     q: keyWord = "",
-    page = 1,
-    limit = 1,
+    page,
+    limit,
     category = null,
     ingredient = null,
   } = req.query;
@@ -137,7 +137,7 @@ const searchRecipes = async (req, res) => {
       $regex: keyWord,
       $options: "i",
     },
-    ...filterObj,
+    filterObj,
   }).count("total");
   const skip = (page - 1) * limit;
   const restPages = Math.ceil((count - skip) / limit) - 1;
