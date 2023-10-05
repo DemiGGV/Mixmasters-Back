@@ -1,15 +1,19 @@
 # Description.
 
-This is the backend server for the Mixmasters project. It is built in a Node.js environment with the Express framework and uses MongoDB as the database. The project also integrates Mongoose for handling database operations, Swagger for API documentation and testing, and Cloudinary for cloud-based image storage.
+This is the Mixmasters project's server-side. It's built using the Express framework in a Node.js environment, with MongoDB as its database, and Cloudinary for image cloud storage.
+The server's features include:
+
+- authorizing and deauthorizing users, adding their information to the database, and enabling changes to be made to them within a user collection;
+- working with the recipe collection involves: sorting existing recipes based on the frontend needs of the Mixmasters project, filtering them, adding recipes to specific users' favorites, and adding new recipes to the database.
 
 ## Technologies Used:
 
-- Node.js: The backend server is built using Node.js, which allows for efficient server-side JavaScript execution.
-- Express: Express is used as the web application framework to simplify routing, middleware, and handling HTTP requests.
-- MongoDB: MongoDB is used as the NoSQL database to store and manage data.
-- Mongoose: Mongoose is an ODM (Object Data Modeling) library for MongoDB, used to define the schema and interact with the database.
-- Swagger: Swagger is used for API documentation, making it easier for developers to understand and use the API endpoints.
-- Cloudinary: Cloudinary is used for cloud-based image storage, allowing you to easily manage and serve images in your application.
+- Node.js: The backend server is built with Node.js, enabling efficient server-side JavaScript execution.
+- Express: The web application framework, Express, is utilized to streamline routing, middleware, and HTTP request handling.
+- MongoDB: We use MongoDB as a NoSQL database to store and manage data.
+- Mongoose: Mongoose is an ODM (Object Data Modeling) library for MongoDB that defines schema and interacts with the database.
+- Swagger: Swagger simplifies API documentation, facilitating developers' understanding and use of API endpoints.
+- Cloudinary: Meanwhile, Cloudinary enables cloud-based image storage, streamlining the management and service of images within your application. To start, follow these steps.
 
 ## Getting Started
 
