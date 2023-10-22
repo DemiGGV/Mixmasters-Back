@@ -1,4 +1,4 @@
-const { HttpError, ctrlWrap } = require("../helpers");
+const { HttpError, ctrlWrap, imageDelete } = require("../helpers");
 const {
   Recipe,
   CATEGORIES,
@@ -235,11 +235,13 @@ const removeFavoritRecipe = async (req, res) => {
   res.status(204).json();
 };
 const removeOwnRecipe = async (req, res) => {
-  // erasing cloudinary image!
   const { _id: userId } = req.user;
   const { id: recipeId } = req.body;
   const doc = await Recipe.findOne({ _id: recipeId, owner: userId });
   if (!doc) throw HttpError(403);
+  const resultCloudinary = await imageDelete(doc.drinkThumb);
+  if (!resultCloudinary || resultCloudinary.result === "not found")
+    throw HttpError(404, "Not Found");
   const result = await Recipe.findByIdAndRemove(recipeId);
   if (!result) throw HttpError(404, "Not Found");
   res.status(204).json();
