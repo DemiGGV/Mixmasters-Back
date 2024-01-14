@@ -151,6 +151,7 @@ const searchRecipes = async (req, res) => {
     },
   }).count("total");
   console.log(count, ingredients);
+  if (+page > +count/limit) {page = Math.ceil(count / limit)};
   const skip = (page - 1) * limit;
   const restPages = !count ? 0 : Math.ceil((count - skip) / limit) - 1;
 
