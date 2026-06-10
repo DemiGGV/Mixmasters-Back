@@ -11,13 +11,13 @@ const userSchema = new Schema(
     name: {
       type: String,
       default: null,
-      requred: [true, "Username is required"],
+      required: [true, "Username is required"],
     },
     birthdate: {
       type: String,
       match: BIRTHDAYPATTERN,
       default: null,
-      requred: [true, "Birthdate is required"],
+      required: [true, "Birthdate is required"],
     },
     isAdult: {
       type: Boolean,
@@ -26,12 +26,12 @@ const userSchema = new Schema(
       type: String,
       match: EMAILPATTERN,
       unique: true,
-      requred: [true, "Email is required"],
+      required: [true, "Email is required"],
     },
     password: {
       type: String,
       minlength: 6,
-      requred: [true, "Password is required"],
+      required: [true, "Password is required"],
     },
     avatarURL: {
       type: String,
