@@ -17,7 +17,7 @@ const uploadFileToCloudinary = async (filePath, file) => {
     // записуються файли у папку drinks зі своїм оригінальним імʼям
     const result = await cloudinary.uploader.upload(filePath, {
       folder: "ingredients",
-      public_id: file.replace(" ", "20"),
+      public_id: file.replaceAll(" ", "20"),
       use_filename: true,
       unique_filename: false,
     });
